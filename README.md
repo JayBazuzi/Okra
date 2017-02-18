@@ -4,9 +4,9 @@
 
 Okra is a TDD/BDD testing framework for C++.
 
-It's optimized for a hybrid TDD/BDD/ATDD/microtest approach. I should probably write something about what I mean by that.
+It's optimized for a hybrid TDD/BDD/ATDD/microtest approach. For a first stab at what that means, check out https://jbazuzicode.blogspot.com/2017/02/micro-atdd.html
 
-Got an idea or wish? Send a pull request.
+Got an idea or wish? Send a pull request or open an issue or [tweet](https://twitter.com/jaybazuzi).
 
 ## Design goals:
 
