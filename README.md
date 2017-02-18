@@ -71,3 +71,28 @@ And while it's neat that this is English, that's still a computer-sciencey expre
 Gherkin lets you write english like that, but then you need extra code to translate between test language and real code. I want to avoid that.
 
 I like the way C#'s Fluent Assertions is extensible, so you can write `Should().BeExpired()`. If we're going to commit to extensibility of assertions, then the built-in assertions should be minimal (maybe just one, which takes a boolean).
+
+## Some syntax ideas
+
+`Example` could be a `#define` that declares a function with the following body, and adds that function to a list somewhere, for the test runner to find.
+```
+Example("it multiplies two numbers")
+{
+   auto testSubject = Calculator();
+   auto result = testSubject.Multiply(6, 9);
+   Assert(result == 42);
+};
+```
+
+We could use [lambdas](http://en.cppreference.com/w/cpp/language/lambda), similar to Jasmine. It avoids the need to create a new function.
+```
+Example("it multiplies two numbers", []
+{
+   auto testSubject = Calculator();
+   auto result = testSubject.Multiply(6, 9);
+   Assert(result == 42);
+});
+```
+
+
+
