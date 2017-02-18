@@ -57,3 +57,17 @@ In the success case, all we're doing is:
 That seems like something computers should be really good at, right? Can that run in 0.1ms or less? If so, the overhead of the test framework, both at compile and execution time, will matter a lot.
 
 TODO: performance analysis of these kinds of microtests in C++
+
+### In-domain assertions
+
+Because I like test-as-spec, where tests are first and foremost human-readable specification, I want my assertions to read well.
+
+Many BDD systems let you write something like:
+
+   result.users.single().is_expired.Should.be.true
+   
+And while it's neat that this is English, that's still a computer-sciencey expression. If I was writing a spec in a non-code document, I might want to write something like "then the user should be expired".
+
+Gherkin lets you write english like that, but then you need extra code to translate between test language and real code. I want to avoid that.
+
+I like the way C#'s Fluent Assertions is extensible, so you can write `Should().BeExpired()`. If we're going to commit to extensibility of assertions, then the built-in assertions should be minimal (maybe just one, which takes a boolean).
