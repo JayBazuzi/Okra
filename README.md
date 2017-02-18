@@ -72,6 +72,16 @@ Gherkin lets you write english like that, but then you need extra code to transl
 
 I like the way C#'s Fluent Assertions is extensible, so you can write `Should().BeExpired()`. If we're going to commit to extensibility of assertions, then the built-in assertions should be minimal (maybe just one, which takes a boolean).
 
+## C++ preprocessor
+
+It's really tempting to use the C++ preprocessor as a substitute for modern languages metaprogramming facilities. But the `#define`s can lead to difficult-to-read code. To the extent possible:
+
+- avoid the preprocessor when a non-preprocessed option has the same value
+- make `#define`s as readable as possible
+- write unit tests for `#defines`. (it's a language, so we can unit test it, right?)
+
+Here are some tricks that may help: https://github.com/pfultz2/Cloak/wiki/C-Preprocessor-tricks,-tips,-and-idioms
+
 ## Some syntax ideas
 
 `Example` could be a `#define` that declares a function with the following body, and adds that function to a list somewhere, for the test runner to find.
