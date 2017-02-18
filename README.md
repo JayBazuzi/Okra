@@ -22,7 +22,7 @@ Okra is a TDD/BDD testing framework for C++.
 
 ### Don't have test fixtures or Describe blocks
 
-When people use NUnit and the like, they often name the test fixture and the file name the same. That's duplication. Let's eliminate it. Instead, use the file name, from __FILE__ .
+When people use NUnit and the like, they often name the test fixture and the file name the same. That's duplication. Let's eliminate it. Instead, use the file name, from \_\_FILE\_\_.
 
 Test runner can collect the file paths of all tests it's going to run and eliminate the common prefix. Then break on path separator and group printed output by directory.
 
