@@ -23,8 +23,6 @@ struct Example {
   }
 };
 
-filesystem::path GetCommonRootTwo(const filesystem::path &path1,
-                                  const filesystem::path &path2);
 filesystem::path get_common_root(vector<filesystem::path> paths);
 
 class Examples {
