@@ -1,5 +1,4 @@
 # TODO
-* Organize tests by directory/file
 
 - CMake
 - Fix casing of path names
