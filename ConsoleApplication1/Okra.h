@@ -10,9 +10,9 @@ void AssertEqual_(const T& t1, const T& t2, string message)
     }
 }
 
-filesystem::path make_path_relative(const filesystem::path& base, const filesystem::path& file)
+filesystem::path format_path_for_display(const filesystem::path& base, filesystem::path file)
 {
-    return filesystem::path(file.string().substr(base.string().length() + 1));
+    return filesystem::path(file.replace_extension().string().substr(base.string().length() + 1));
 }
 
 struct Example
@@ -23,7 +23,7 @@ struct Example
 
     void Run(filesystem::path base) const
     {
-        cout << make_path_relative(base, file) << endl;
+        cout << format_path_for_display(base, file) << endl;
         cout << name << endl;
         body();
         cout << endl;

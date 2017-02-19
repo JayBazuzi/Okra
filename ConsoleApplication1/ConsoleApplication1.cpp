@@ -25,8 +25,8 @@ Example("common root of vector of paths")
 
 Example("returns the given path relative to the base")
 {
-    auto result = make_path_relative(R"(C:\foo)", R"(C:\foo\qux\baz.cpp)");
-    AssertEqual(result.string(), string(R"(qux\baz.cpp)"));
+    auto result = format_path_for_display(R"(C:\foo)", R"(C:\foo\qux\baz.cpp)");
+    AssertEqual(result.string(), string(R"(qux\baz)"));
 }
 
 int main(int argc, char** argv)
