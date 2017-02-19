@@ -1,6 +1,7 @@
 # TODO
 
 - Fix casing of path names
+- eliminate __declspec(selectany)
 - Continuous Integration on VC++, clang, and gcc
 - What should Assert look like?
 - special asserts for string equality, to avoid explicit casting?
