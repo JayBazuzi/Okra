@@ -26,11 +26,11 @@ struct Example {
 template <typename TSource, typename TDestination>
 inline vector<TDestination>
 transform(const vector<TSource> &input,
-    function<TDestination(TSource)> operation) {
-    vector<TDestination> result;
-    std::transform(input.cbegin(), input.cend(), back_inserter(result),
-        operation);
-    return result;
+          function<TDestination(TSource)> operation) {
+  vector<TDestination> result;
+  std::transform(input.cbegin(), input.cend(), back_inserter(result),
+                 operation);
+  return result;
 }
 
 filesystem::path get_common_root(vector<filesystem::path> paths);
@@ -41,13 +41,11 @@ class Examples {
 public:
   void Add(Example example) { examples.push_back(example); }
 
-  static filesystem::path GetCommonFileRoot(const vector<Example> &examples) {
-    return get_common_root(transform<Example, filesystem::path>(
-        examples, [](const auto &_) { return _.file; }));
-  }
-
   void RunAll() const {
-    auto maximumSharedFilePrefix = GetCommonFileRoot(examples);
+    auto maximumSharedFilePrefix =
+        get_common_root(transform<Example, filesystem::path>(
+            examples, [](const auto &_) { return _.file; }));
+
     for (const auto &example : examples) {
       example.Run(maximumSharedFilePrefix);
     }
