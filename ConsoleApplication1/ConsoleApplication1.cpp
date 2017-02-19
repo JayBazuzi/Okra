@@ -8,6 +8,15 @@ Example("common root of two related paths")
     AssertEqual(result.string(), string(R"(C:\foo)"));
 }
 
+Example("same path just returns directory")
+{
+    auto result = GetCommonRootMany(
+    { R"(C:\foo\bar.cpp)",
+        R"(C:\foo\bar.cpp)"
+    });
+    AssertEqual(result.string(), string(R"(C:\foo)"));
+}
+
 Example("common root of vector of paths")
 {
     auto result = GetCommonRootMany({ R"(C:\foo\bar.cpp)", R"(C:\foo\qux\baz.cpp)" });

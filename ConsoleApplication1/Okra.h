@@ -38,10 +38,11 @@ filesystem::path GetCommonRootTwo(const filesystem::path& path1, const filesyste
     while (iter1 != path1.end() && iter2 != path2.end())
     {
         if (*iter1 != *iter2) { break; }
-        common += *iter1;
+        common /= *iter1;
         iter1++;
         iter2++;
     }
+    
     return common;
 }
 
@@ -50,7 +51,7 @@ filesystem::path GetCommonRootMany(vector<filesystem::path> paths)
     return accumulate(
         next(paths.begin()),
         paths.end(),
-        paths.front(),
+        paths.front().remove_filename(),
         GetCommonRootTwo);
 }
 
