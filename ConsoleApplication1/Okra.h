@@ -9,7 +9,7 @@ void AssertEqual_(const T &t, const U &u, string message) {
 }
 
 filesystem::path get_test_name_from_path(const filesystem::path &base,
-    filesystem::path file);
+                                         filesystem::path file);
 
 struct Example {
   filesystem::path file;
@@ -25,8 +25,8 @@ struct Example {
 };
 
 filesystem::path GetCommonRootTwo(const filesystem::path &path1,
-    const filesystem::path &path2);
-filesystem::path get_common_root(vector<filesystem::path> paths); 
+                                  const filesystem::path &path2);
+filesystem::path get_common_root(vector<filesystem::path> paths);
 
 class Examples {
   vector<Example> examples;
@@ -53,8 +53,9 @@ public:
 #define Example_(name, counter) Example__(name, counter)
 #define Example__(name, counter)                                               \
   Example___(name, Example##counter, ExampleInitializer##counter)
-#define Example___(name, initializerName, bodyName)                            \
-  namespace {void bodyName();                                                             \
+#define Example___(name, bodyName, initializerName)                            \
+  namespace {                                                                  \
+  void bodyName();                                                             \
   struct initializerName {                                                     \
     initializerName() { allExamples.Add({__FILE__, name, bodyName}); }         \
   } initializerName##Instance;                                                 \
@@ -65,35 +66,35 @@ __declspec(selectany) Examples allExamples;
 #ifdef OKRA_MAIN
 
 filesystem::path GetCommonRootTwo(const filesystem::path &path1,
-    const filesystem::path &path2) {
-    filesystem::path common;
-    auto iter1 = path1.begin();
-    auto iter2 = path2.begin();
-    while (iter1 != path1.end() && iter2 != path2.end()) {
-        if (*iter1 != *iter2) {
-            break;
-        }
-        common /= *iter1;
-        iter1++;
-        iter2++;
+                                  const filesystem::path &path2) {
+  filesystem::path common;
+  auto iter1 = path1.begin();
+  auto iter2 = path2.begin();
+  while (iter1 != path1.end() && iter2 != path2.end()) {
+    if (*iter1 != *iter2) {
+      break;
     }
+    common /= *iter1;
+    iter1++;
+    iter2++;
+  }
 
-    return common;
+  return common;
 }
 
 filesystem::path get_common_root(vector<filesystem::path> paths) {
-    return accumulate(next(paths.begin()), paths.end(),
-        paths.front().remove_filename(), GetCommonRootTwo);
+  return accumulate(next(paths.begin()), paths.end(),
+                    paths.front().remove_filename(), GetCommonRootTwo);
 }
 
 filesystem::path get_test_name_from_path(const filesystem::path &base,
-    filesystem::path file) {
-    return filesystem::path(
-        file.replace_extension().string().substr(base.string().length() + 1));
+                                         filesystem::path file) {
+  return filesystem::path(
+      file.replace_extension().string().substr(base.string().length() + 1));
 }
 int main(int argc, char **argv) {
-    allExamples.RunAll();
-    return 0;
+  allExamples.RunAll();
+  return 0;
 }
 
 #endif
