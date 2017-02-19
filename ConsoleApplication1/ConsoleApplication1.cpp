@@ -1,75 +1,24 @@
-// ConsoleApplication1.cpp : Defines the entry point for the console application.
-//
-
 #include "stdafx.h"
-#include <iostream>
-#include <functional>
-#include <vector>
-#include <string>
-#include <algorithm>
-using namespace std;
 
-class Calculator
-{
-public:
-    int Multiply(int x, int y) { return x * y; }
-};
+#include "Okra.h"
 
-void Assert(bool b)
+Example("common root of two related paths")
 {
-    cout << "assertion " << (b ? "pass": "fail") << endl;
+    auto result = GetCommonRootTwo(R"(C:\foo\bar.cpp)", R"(C:\foo\qux\baz.cpp)");
+    AssertEqual(result.string(), string(R"(C:\foo)"));
 }
 
-struct Example
+Example("common root of vector of paths")
 {
-    string file;
-    string name;
-    function<void(void)> body;
+    auto result = GetCommonRootMany({ R"(C:\foo\bar.cpp)", R"(C:\foo\qux\baz.cpp)" });
+    AssertEqual(result.string(), string(R"(C:\foo)"));
+}
 
-    void Run() const
-    {
-        cout << file << endl;
-        cout << name << endl;
-        body();
-        cout << endl;
-    }
-};
-
-class Examples
+Example("returns the given path relative to the base")
 {
-    vector<Example> examples;
-
-public:
-    void Add(Example example) { examples.push_back(example); }
-
-    void RunAll() const
-    {
-        for (const auto& example : examples)
-        {
-            example.Run();
-        }
-    }
-};
-
-Examples allExamples;
-
-#define Example(name, body) Example_(name, body, __COUNTER__)
-#define Example_(name, body, counter) Example__(name, body, counter)
-#define Example__(name, body, counter)                                                  \
-    struct ExampleInitializer##counter                                                  \
-    {                                                                                   \
-        ExampleInitializer##counter()                                                   \
-        {                                                                               \
-            allExamples.Add({__FILE__, name, body});                                     \
-        }                                                                               \
-    } ExampleInitializer##counter##Instance;                                            \
-
-Example("it multiplies two numbers", []
-{
-    auto testSubject = Calculator();
-    auto result = testSubject.Multiply(6, 9);
-    Assert(result == 42);
-});
+    auto result = make_path_relative(R"(C:\foo)", R"(C:\foo\qux\baz.cpp)");
+    AssertEqual(result.string(), string(R"(qux\baz.cpp)"));
+}
 
 int main(int argc, char** argv)
 {

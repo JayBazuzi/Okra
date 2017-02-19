@@ -8,6 +8,15 @@ It's optimized for a hybrid TDD/BDD/ATDD/microtest approach. For a first stab at
 
 Well, it will be. Right now we're just playing with ideas. Got an idea or wish? Send a pull request or open an issue or [tweet](https://twitter.com/jaybazuzi).
 
+## Syntax
+
+// make_path_relative.cpp
+Example("returns the given path relative to the base")
+{
+    auto result = make_path_relative(R"(C:\foo)", R"(C:\foo\qux\baz.cpp)");
+    AssertEqual(result.string(), string(R"(qux\baz.cpp)"));
+}
+
 ## Design goals:
 
 - Avoid duplication. The names of tests or whatever should only appear in one place.
@@ -82,17 +91,7 @@ It's really tempting to use the C++ preprocessor as a substitute for modern lang
 
 Here are some tricks that may help: https://github.com/pfultz2/Cloak/wiki/C-Preprocessor-tricks,-tips,-and-idioms
 
-## Some syntax ideas
-
-`Example` could be a `#define` that declares a function with the following body, and adds that function to a list somewhere, for the test runner to find.
-```
-Example("it multiplies two numbers")
-{
-   auto testSubject = Calculator();
-   auto result = testSubject.Multiply(6, 9);
-   Assert(result == 42);
-};
-```
+## Other syntax ideas
 
 We could use [lambdas](http://en.cppreference.com/w/cpp/language/lambda), similar to Jasmine. It avoids the need to create a new function.
 ```
@@ -103,6 +102,4 @@ Example("it multiplies two numbers", []
    Assert(result == 42);
 });
 ```
-
-
-
+I think this makes it more obvious what `Example()` is doing, but I found that if there was a compile error in the body, the compiler reported it on the `Example()` line, which makes diagnosis difficult.
