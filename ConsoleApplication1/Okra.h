@@ -82,13 +82,14 @@ Examples allExamples;
 
 #define Example(name) Example_(name, __COUNTER__)
 #define Example_(name, counter) Example__(name, counter)
-#define Example__(name, counter)                                                        \
-    void Example##counter();                                                            \
-    struct ExampleInitializer##counter                                                  \
+#define Example__(name, counter) Example___(name, Example##counter, ExampleInitializer##counter)
+#define Example___(name, initializerName, bodyName)                                     \
+    void bodyName();                                                                    \
+    struct initializerName                                                              \
     {                                                                                   \
-        ExampleInitializer##counter()                                                   \
+        initializerName()                                                               \
         {                                                                               \
-            allExamples.Add({__FILE__, name, Example##counter});                        \
+            allExamples.Add({__FILE__, name, bodyName});                                \
         }                                                                               \
-    } ExampleInitializer##counter##Instance;                                            \
-    void Example##counter()
+    } initializerName##Instance;                                                        \
+    void bodyName()
