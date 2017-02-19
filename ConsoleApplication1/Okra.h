@@ -94,3 +94,11 @@ Examples allExamples;
         }                                                                               \
     } initializerName##Instance;                                                        \
     void bodyName()
+
+#ifdef OKRA_MAIN
+int main(int argc, char** argv)
+{
+    allExamples.RunAll();
+    return 0;
+}
+#endif
