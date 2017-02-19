@@ -31,16 +31,17 @@ class Examples {
 public:
   void Add(Example example) { examples.push_back(example); }
 
-  static vector<filesystem::path> GetFiles(const vector<Example> &examples)
+    template<typename TDestination>
+  static vector<TDestination> GetFiles(const vector<Example> &examples)
   {
-      vector<filesystem::path> paths;
+      vector<TDestination> paths;
       transform(examples.cbegin(), examples.cend(), back_inserter(paths),
           [](const Example &_) { return _.file; });
       return paths;
   }
 
   static filesystem::path GetCommonFileRoot(const vector<Example> &examples) {
-    return get_common_root(GetFiles(examples));
+    return get_common_root(GetFiles<filesystem::path>(examples));
   }
 
   void RunAll() const {
