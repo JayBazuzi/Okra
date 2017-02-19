@@ -34,9 +34,9 @@ public:
     template<typename TSource, typename TDestination>
   static vector<TDestination> transform(const vector<TSource> &examples, function<TDestination(TSource)> operation)
   {
-      vector<TDestination> paths;
-      std::transform(examples.cbegin(), examples.cend(), back_inserter(paths),operation          );
-      return paths;
+      vector<TDestination> result;
+      std::transform(examples.cbegin(), examples.cend(), back_inserter(result),operation          );
+      return result;
   }
 
   static filesystem::path GetCommonFileRoot(const vector<Example> &examples) {
