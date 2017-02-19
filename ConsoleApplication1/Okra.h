@@ -60,6 +60,7 @@ public:
   } initializerName##Instance;                                                 \
   void bodyName()
 
+// consider using __attribute__((weak)) and maybe #pragma comment(linker, "/alternatename:_pWeakValue=_pDefaultWeakValue")
 __declspec(selectany) Examples allExamples;
 
 #ifdef OKRA_MAIN
