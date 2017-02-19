@@ -17,8 +17,7 @@ struct Example {
   function<void(void)> body;
 
   void Run(filesystem::path base) const {
-    cout << get_test_name_from_path(base, file) << endl;
-    cout << name << endl;
+    cout << get_test_name_from_path(base, file) << " - " << name;
     body();
     cout << endl;
   }
