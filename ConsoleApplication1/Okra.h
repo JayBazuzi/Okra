@@ -64,7 +64,7 @@ __declspec(selectany) Examples allExamples;
 
 #ifdef OKRA_MAIN
 
-filesystem::path GetCommonRootTwo(const filesystem::path &path1,
+filesystem::path get_common_root2(const filesystem::path &path1,
                                   const filesystem::path &path2) {
   filesystem::path common;
   auto iter1 = path1.begin();
@@ -83,7 +83,7 @@ filesystem::path GetCommonRootTwo(const filesystem::path &path1,
 
 filesystem::path get_common_root(vector<filesystem::path> paths) {
   return accumulate(next(paths.begin()), paths.end(),
-                    paths.front().remove_filename(), GetCommonRootTwo);
+                    paths.front().remove_filename(), get_common_root2);
 }
 
 filesystem::path get_test_name_from_path(const filesystem::path &base,
@@ -91,6 +91,7 @@ filesystem::path get_test_name_from_path(const filesystem::path &base,
   return filesystem::path(
       file.replace_extension().string().substr(base.string().length() + 1));
 }
+
 int main(int argc, char **argv) {
   allExamples.RunAll();
   return 0;
