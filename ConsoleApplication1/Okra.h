@@ -32,10 +32,10 @@ public:
   void Add(Example example) { examples.push_back(example); }
 
     template<typename TSource, typename TDestination>
-  static vector<TDestination> transform(const vector<TSource> &examples, function<TDestination(TSource)> operation)
+  static vector<TDestination> transform(const vector<TSource> &input, function<TDestination(TSource)> operation)
   {
       vector<TDestination> result;
-      std::transform(examples.cbegin(), examples.cend(), back_inserter(result),operation          );
+      std::transform(input.cbegin(), input.cend(), back_inserter(result),operation          );
       return result;
   }
 
