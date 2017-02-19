@@ -34,9 +34,9 @@ public:
     template<typename TSource, typename TDestination>
   static vector<TDestination> GetFiles(const vector<TSource> &examples)
   {
+      function<TDestination(TSource)> operation = [](const TSource &_) { return _.file; };
       vector<TDestination> paths;
-      transform(examples.cbegin(), examples.cend(), back_inserter(paths),
-          [](const TSource &_) { return _.file; });
+      transform(examples.cbegin(), examples.cend(), back_inserter(paths),operation          );
       return paths;
   }
 
