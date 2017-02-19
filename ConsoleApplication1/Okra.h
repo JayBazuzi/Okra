@@ -23,6 +23,16 @@ struct Example {
   }
 };
 
+template <typename TSource, typename TDestination>
+inline vector<TDestination>
+transform(const vector<TSource> &input,
+    function<TDestination(TSource)> operation) {
+    vector<TDestination> result;
+    std::transform(input.cbegin(), input.cend(), back_inserter(result),
+        operation);
+    return result;
+}
+
 filesystem::path get_common_root(vector<filesystem::path> paths);
 
 class Examples {
@@ -30,16 +40,6 @@ class Examples {
 
 public:
   void Add(Example example) { examples.push_back(example); }
-
-  template <typename TSource, typename TDestination>
-  static vector<TDestination>
-  transform(const vector<TSource> &input,
-            function<TDestination(TSource)> operation) {
-    vector<TDestination> result;
-    std::transform(input.cbegin(), input.cend(), back_inserter(result),
-                   operation);
-    return result;
-  }
 
   static filesystem::path GetCommonFileRoot(const vector<Example> &examples) {
     return get_common_root(transform<Example, filesystem::path>(
