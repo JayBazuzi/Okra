@@ -6,6 +6,7 @@
 #include <functional>
 #include <vector>
 #include <string>
+#include <algorithm>
 using namespace std;
 
 class Calculator
@@ -24,19 +25,19 @@ struct Example
     string file;
     string name;
     function<void(void)> body;
+
+    void Run() const
+    {
+        cout << file << endl;
+        cout << name << endl;
+        body();
+        cout << endl;
+    }
 };
 
 class Examples
 {
     vector<Example> examples;
-
-    void RunOne(const Example & example) const
-    {
-        cout << example.file << endl;
-        cout << '\t' << example.name << endl;
-        example.body();
-        cout << endl;
-    }
 
 public:
     void Add(Example example) { examples.push_back(example); }
@@ -45,36 +46,33 @@ public:
     {
         for (const auto& example : examples)
         {
-            RunOne(example);
+            example.Run();
         }
     }
 };
 
 Examples allExamples;
 
-#define Example(name) Example_(name, __COUNTER__)
-#define Example_(name, counter) Example__(name, counter)
-#define Example__(name, counter)                                                        \
-    void Example##counter();                                                            \
+#define Example(name, body) Example_(name, body, __COUNTER__)
+#define Example_(name, body, counter) Example__(name, body, counter)
+#define Example__(name, body, counter)                                                  \
     struct ExampleInitializer##counter                                                  \
     {                                                                                   \
         ExampleInitializer##counter()                                                   \
         {                                                                               \
-            allExamples.Add({__FILE__, name, Example##counter});                        \
+            allExamples.Add({__FILE__, name, body});                                     \
         }                                                                               \
     } ExampleInitializer##counter##Instance;                                            \
-    void Example##counter()
 
-Example("it multiplies two numbers")
+Example("it multiplies two numbers", []
 {
     auto testSubject = Calculator();
     auto result = testSubject.Multiply(6, 9);
     Assert(result == 42);
-};
+});
 
 int main(int argc, char** argv)
 {
     allExamples.RunAll();
     return 0;
 }
-
