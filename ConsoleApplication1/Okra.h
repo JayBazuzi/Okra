@@ -61,7 +61,7 @@ class Examples
 public:
     void Add(Example example) { examples.push_back(example); }
 
-    static filesystem::path GetMaximumSharedFilePrefix(const vector<Example>& examples)
+    static filesystem::path GetCommonFileRoot(const vector<Example>& examples)
     {
         vector<filesystem::path> paths;
         transform(examples.cbegin(), examples.cend(), back_inserter(paths), [](const Example& _) {return _.file; });
@@ -70,7 +70,7 @@ public:
 
     void RunAll() const
     {
-        auto maximumSharedFilePrefix = GetMaximumSharedFilePrefix(examples);
+        auto maximumSharedFilePrefix = GetCommonFileRoot(examples);
         for (const auto& example : examples)
         {
             example.Run(maximumSharedFilePrefix);
