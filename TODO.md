@@ -1,6 +1,4 @@
 # TODO
-* report results with relative paths
-
 - CMake
 - Continuous Integration on VC++, clang, and gcc
 - What should Assert look like?
