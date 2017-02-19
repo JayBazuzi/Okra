@@ -40,7 +40,7 @@ public:
   }
 
   static filesystem::path GetCommonFileRoot(const vector<Example> &examples) {
-    return get_common_root(transform<Example, filesystem::path>(examples, [](const Example &_) { return _.file; }));
+    return get_common_root(transform<Example, filesystem::path>(examples, [](const auto &_) { return _.file; }));
   }
 
   void RunAll() const {
