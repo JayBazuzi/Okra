@@ -1,5 +1,6 @@
 # TODO
-- Organize tests by directory/file
+* Organize tests by directory/file
+
 - CMake
 - Fix casing of path names
 - Continuous Integration on VC++, clang, and gcc
