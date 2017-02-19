@@ -32,15 +32,15 @@ public:
   void Add(Example example) { examples.push_back(example); }
 
     template<typename TSource, typename TDestination>
-  static vector<TDestination> GetFiles(const vector<TSource> &examples, function<TDestination(TSource)> operation)
+  static vector<TDestination> transform(const vector<TSource> &examples, function<TDestination(TSource)> operation)
   {
       vector<TDestination> paths;
-      transform(examples.cbegin(), examples.cend(), back_inserter(paths),operation          );
+      std::transform(examples.cbegin(), examples.cend(), back_inserter(paths),operation          );
       return paths;
   }
 
   static filesystem::path GetCommonFileRoot(const vector<Example> &examples) {
-    return get_common_root(GetFiles<Example, filesystem::path>(examples, [](const Example &_) { return _.file; }));
+    return get_common_root(transform<Example, filesystem::path>(examples, [](const Example &_) { return _.file; }));
   }
 
   void RunAll() const {
