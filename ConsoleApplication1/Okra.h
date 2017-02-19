@@ -31,16 +31,19 @@ class Examples {
 public:
   void Add(Example example) { examples.push_back(example); }
 
-    template<typename TSource, typename TDestination>
-  static vector<TDestination> transform(const vector<TSource> &input, function<TDestination(TSource)> operation)
-  {
-      vector<TDestination> result;
-      std::transform(input.cbegin(), input.cend(), back_inserter(result),operation          );
-      return result;
+  template <typename TSource, typename TDestination>
+  static vector<TDestination>
+  transform(const vector<TSource> &input,
+            function<TDestination(TSource)> operation) {
+    vector<TDestination> result;
+    std::transform(input.cbegin(), input.cend(), back_inserter(result),
+                   operation);
+    return result;
   }
 
   static filesystem::path GetCommonFileRoot(const vector<Example> &examples) {
-    return get_common_root(transform<Example, filesystem::path>(examples, [](const auto &_) { return _.file; }));
+    return get_common_root(transform<Example, filesystem::path>(
+        examples, [](const auto &_) { return _.file; }));
   }
 
   void RunAll() const {
@@ -63,7 +66,8 @@ public:
   } initializerName##Instance;                                                 \
   void bodyName()
 
-// consider using __attribute__((weak)) and maybe #pragma comment(linker, "/alternatename:_pWeakValue=_pDefaultWeakValue")
+// consider using __attribute__((weak)) and maybe #pragma comment(linker,
+// "/alternatename:_pWeakValue=_pDefaultWeakValue")
 __declspec(selectany) Examples allExamples;
 
 #ifdef OKRA_MAIN
