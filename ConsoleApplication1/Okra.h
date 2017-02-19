@@ -1,9 +1,10 @@
 #pragma once
 
 #define AssertEqual(t1, t2) AssertEqual_((t1), (t2), #t1 " == " #t2)
-template <class T> void AssertEqual_(const T &t1, const T &t2, string message) {
-  if (t1 != t2) {
-    cout << message << " - assert FAILED - " << t1 << " != " << t2 << endl;
+template <class T, class U>
+void AssertEqual_(const T &t, const U &u, string message) {
+  if (t != u) {
+    cout << message << " - assert FAILED - " << t << " != " << u << endl;
   }
 }
 
