@@ -5,10 +5,11 @@ include_directories(AFTER ${CMAKE_CURRENT_SOURCE_DIR}/ConsoleApplication1)
 FILE(GLOB_RECURSE ALL_SOURCE_FILES 
     "ConsoleApplication1/*.cpp"
     )
-FILE(WRITE ${CMAKE_BINARY_DIR}/okra_main.cpp "")
-FILE(APPEND ${CMAKE_BINARY_DIR}/okra_main.cpp "#include \"stdafx.h\"\n")
-FILE(APPEND ${CMAKE_BINARY_DIR}/okra_main.cpp "#define OKRA_MAIN\n")
-FILE(APPEND ${CMAKE_BINARY_DIR}/okra_main.cpp "#include \"Okra.h\"\n")
+FILE(WRITE ${CMAKE_BINARY_DIR}/okra_main.cpp "
+    #include \"stdafx.h\"
+    #define OKRA_MAIN 1
+    #include \"Okra.h\"
+    ")
 ADD_EXECUTABLE(all_tests ${ALL_SOURCE_FILES} ${CMAKE_BINARY_DIR}/okra_main.cpp)
 
 FOREACH(file ${ALL_SOURCE_FILES})
