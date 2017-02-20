@@ -15,7 +15,7 @@ Example("returns the given path relative to the base")
 {
     auto result = make_path_relative(R"(C:\foo)", R"(C:\foo\qux\baz.cpp)");
     AssertEqual(result.string(), string(R"(qux\baz.cpp)"));
-}
+}}
 
 ## Design goals:
 
