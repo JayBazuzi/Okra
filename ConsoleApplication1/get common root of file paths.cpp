@@ -1,6 +1,5 @@
 #include "stdafx.h"
 
-#define OKRA_MAIN
 #include "Okra.h"
 
 Example("common root of two related paths") {
