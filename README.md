@@ -4,7 +4,7 @@
 
 Okra is a TDD/BDD testing framework for C++. 
 
-It's optimized for a hybrid TDD/BDD/ATDD/microtest approach. For a first stab at what that means, check out https://jbazuzicode.blogspot.com/2017/02/micro-atdd.html
+It's optimized for a hybrid TDD/BDD/ATDD/microtest/test-as-spec approach. For a first stab at what that means, check out https://jbazuzicode.blogspot.com/2017/02/micro-atdd.html
 
 Well, it will be. Right now we're just playing with ideas. Got an idea or wish? Send a pull request or open an issue or [tweet](https://twitter.com/jaybazuzi).
 
@@ -15,7 +15,7 @@ Example("returns the given path relative to the base")
 {
     auto result = make_path_relative(R"(C:\foo)", R"(C:\foo\qux\baz.cpp)");
     AssertEqual(result.string(), string(R"(qux\baz.cpp)"));
-}}
+}
 
 ## Design goals:
 
