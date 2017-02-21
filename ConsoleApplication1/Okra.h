@@ -8,8 +8,33 @@ void AssertEqual_(const T &t, const U &u, string message) {
   }
 }
 
-filesystem::path get_test_name_from_path(const filesystem::path &base,
-                                         filesystem::path file);
+inline filesystem::path get_common_root2(const filesystem::path &path1,
+    const filesystem::path &path2) {
+    filesystem::path common;
+    auto iter1 = path1.begin();
+    auto iter2 = path2.begin();
+    while (iter1 != path1.end() && iter2 != path2.end()) {
+        if (*iter1 != *iter2) {
+            break;
+        }
+        common /= *iter1;
+        iter1++;
+        iter2++;
+    }
+
+    return common;
+}
+
+inline filesystem::path get_common_root(vector<filesystem::path> paths) {
+    return accumulate(next(paths.begin()), paths.end(),
+        paths.front().remove_filename(), get_common_root2);
+}
+
+inline filesystem::path get_test_name_from_path(const filesystem::path &base,
+    filesystem::path file) {
+    return filesystem::path(
+        file.replace_extension().string().substr(base.string().length() + 1));
+}
 
 struct Example {
   filesystem::path file;
@@ -32,8 +57,6 @@ transform(const vector<TSource> &input,
                  operation);
   return result;
 }
-
-filesystem::path get_common_root(vector<filesystem::path> paths);
 
 class Examples {
   vector<Example> examples;
@@ -69,34 +92,6 @@ public:
 __declspec(selectany) Examples allExamples;
 
 #ifdef OKRA_MAIN
-
-filesystem::path get_common_root2(const filesystem::path &path1,
-                                  const filesystem::path &path2) {
-  filesystem::path common;
-  auto iter1 = path1.begin();
-  auto iter2 = path2.begin();
-  while (iter1 != path1.end() && iter2 != path2.end()) {
-    if (*iter1 != *iter2) {
-      break;
-    }
-    common /= *iter1;
-    iter1++;
-    iter2++;
-  }
-
-  return common;
-}
-
-filesystem::path get_common_root(vector<filesystem::path> paths) {
-  return accumulate(next(paths.begin()), paths.end(),
-                    paths.front().remove_filename(), get_common_root2);
-}
-
-filesystem::path get_test_name_from_path(const filesystem::path &base,
-                                         filesystem::path file) {
-  return filesystem::path(
-      file.replace_extension().string().substr(base.string().length() + 1));
-}
 
 int main(int argc, char **argv) {
   allExamples.RunAll();
