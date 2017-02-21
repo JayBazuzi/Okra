@@ -77,22 +77,27 @@ public:
   }
 };
 
-#define Example(name) Example_(name, __COUNTER__)
-#define Example_(name, counter) Example__(name, counter)
-#define Example__(name, counter)                                               \
-  Example___(name, Example##counter, ExampleInitializer##counter)
-#define Example___(name, bodyName, initializerName)                            \
-  namespace {                                                                  \
-  void bodyName();                                                             \
-  struct initializerName {                                                     \
-    initializerName() { okra::allExamples.Add({__FILE__, name, bodyName}); }         \
-  } initializerName##Instance;                                                 \
-  void bodyName()
-
 // consider using __attribute__((weak)) and maybe #pragma comment(linker,
 // "/alternatename:_pWeakValue=_pDefaultWeakValue")
 __declspec(selectany) Examples allExamples;
 }
+
+#define OKRA_Example(name) OKRA_Example_(name, __COUNTER__)
+#define OKRA_Example_(name, counter) OKRA_Example__(name, counter)
+#define OKRA_Example__(name, counter)                                          \
+  OKRA_Example___(name, Example##counter, ExampleInitializer##counter)
+#define OKRA_Example___(name, bodyName, initializerName)                       \
+  namespace {                                                                  \
+  void bodyName();                                                             \
+  struct initializerName {                                                     \
+    initializerName() { okra::allExamples.Add({__FILE__, name, bodyName}); }   \
+  } initializerName##Instance;                                                 \
+  void bodyName()
+
+#ifndef OKRA_DO_NOT_DEFINE_EXAMPLE
+# define Example OKRA_Example
+#endif
+
 #ifdef OKRA_MAIN
 
 int main(int argc, char **argv) {
