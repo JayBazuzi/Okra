@@ -1,6 +1,8 @@
 #pragma once
 
 #define AssertEqual(t1, t2) AssertEqual_((t1), (t2), #t1 " == " #t2)
+namespace okra
+{
 template <class T, class U>
 void AssertEqual_(const T &t, const U &u, string message) {
   if (t != u) {
@@ -83,18 +85,18 @@ public:
   namespace {                                                                  \
   void bodyName();                                                             \
   struct initializerName {                                                     \
-    initializerName() { allExamples.Add({__FILE__, name, bodyName}); }         \
+    initializerName() { okra::allExamples.Add({__FILE__, name, bodyName}); }         \
   } initializerName##Instance;                                                 \
   void bodyName()
 
 // consider using __attribute__((weak)) and maybe #pragma comment(linker,
 // "/alternatename:_pWeakValue=_pDefaultWeakValue")
 __declspec(selectany) Examples allExamples;
-
+}
 #ifdef OKRA_MAIN
 
 int main(int argc, char **argv) {
-  allExamples.RunAll();
+  okra::allExamples.RunAll();
   return 0;
 }
 
