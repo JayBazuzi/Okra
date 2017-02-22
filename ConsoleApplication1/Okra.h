@@ -1,5 +1,15 @@
 #pragma once
 
+#include <iostream>
+#include <functional>
+#include <vector>
+#include <string>
+#include <algorithm>
+#include <numeric>
+#include <iterator>
+
+#include <experimental/filesystem>
+
 #define AssertEqual(t1, t2) AssertEqual_((t1), (t2), #t1 " == " #t2)
 namespace okra
 {
