@@ -11,7 +11,5 @@
 #include <algorithm>
 #include <numeric>
 #include <iterator>
-using namespace std;
 
 #include <experimental/filesystem>
-using namespace std::experimental;

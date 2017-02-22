@@ -4,15 +4,16 @@
 namespace okra
 {
 template <class T, class U>
-void AssertEqual_(const T &t, const U &u, string message) {
+void AssertEqual_(const T &t, const U &u, std::string message) {
   if (t != u) {
-    cout << message << " - assert FAILED - " << t << " != " << u << endl;
+      std::cout << message << " - assert FAILED - " << t << " != " << u << std::endl;
   }
 }
 
-inline filesystem::path get_common_root2(const filesystem::path &path1,
-    const filesystem::path &path2) {
-    filesystem::path common;
+
+inline std::experimental::filesystem::path get_common_root2(const std::experimental::filesystem::path &path1,
+    const std::experimental::filesystem::path &path2) {
+    std::experimental::filesystem::path common;
     auto iter1 = path1.begin();
     auto iter2 = path2.begin();
     while (iter1 != path1.end() && iter2 != path2.end()) {
@@ -27,48 +28,48 @@ inline filesystem::path get_common_root2(const filesystem::path &path1,
     return common;
 }
 
-inline filesystem::path get_common_root(vector<filesystem::path> paths) {
-    return accumulate(next(paths.begin()), paths.end(),
+inline std::experimental::filesystem::path get_common_root(std::vector<std::experimental::filesystem::path> paths) {
+    return std::accumulate(next(paths.begin()), paths.end(),
         paths.front().remove_filename(), get_common_root2);
 }
 
-inline filesystem::path get_test_name_from_path(const filesystem::path &base,
-    filesystem::path file) {
-    return filesystem::path(
+inline std::experimental::filesystem::path get_test_name_from_path(const std::experimental::filesystem::path &base,
+    std::experimental::filesystem::path file) {
+    return std::experimental::filesystem::path(
         file.replace_extension().string().substr(base.string().length() + 1));
 }
 
 struct Example {
-  filesystem::path file;
-  string name;
-  function<void(void)> body;
+  std::experimental::filesystem::path file;
+  std::string name;
+  std::function<void(void)> body;
 
-  void Run(filesystem::path base) const {
-    cout << get_test_name_from_path(base, file) << " - " << name;
+  void Run(std::experimental::filesystem::path base) const {
+      std::cout << get_test_name_from_path(base, file) << " - " << name;
     body();
-    cout << endl;
+    std::cout << std::endl;
   }
 };
 
 template <typename TSource, typename TDestination>
-inline vector<TDestination>
-transform(const vector<TSource> &input,
-          function<TDestination(TSource)> operation) {
-  vector<TDestination> result;
-  std::transform(input.cbegin(), input.cend(), back_inserter(result),
+inline std::vector<TDestination>
+transform(const std::vector<TSource> &input,
+          const std::function<TDestination(TSource)> operation) {
+    std::vector<TDestination> result;
+  std::transform(input.cbegin(), input.cend(), std::back_inserter(result),
                  operation);
   return result;
 }
 
 class Examples {
-  vector<Example> examples;
+    std::vector<Example> examples;
 
 public:
   void Add(Example example) { examples.push_back(example); }
 
   void RunAll() const {
     auto maximumSharedFilePrefix =
-        get_common_root(transform<Example, filesystem::path>(
+        get_common_root(transform<Example, std::experimental::filesystem::path>(
             examples, [](const auto &_) { return _.file; }));
 
     for (const auto &example : examples) {
