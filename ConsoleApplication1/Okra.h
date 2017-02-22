@@ -19,7 +19,7 @@ void AssertEqual_(const T &t, const U &u, std::string message) {
               << std::endl;
   }
 }
-
+namespace internals {
 inline std::experimental::filesystem::path
 get_common_root2(const std::experimental::filesystem::path &path1,
                  const std::experimental::filesystem::path &path2) {
@@ -94,6 +94,7 @@ public:
 // "/alternatename:_pWeakValue=_pDefaultWeakValue")
 __declspec(selectany) Examples allExamples;
 }
+}
 
 #define OKRA_Example(name) OKRA_Example_(name, __COUNTER__)
 #define OKRA_Example_(name, counter) OKRA_Example__(name, counter)
@@ -103,7 +104,9 @@ __declspec(selectany) Examples allExamples;
   namespace {                                                                  \
   void bodyName();                                                             \
   struct initializerName {                                                     \
-    initializerName() { okra::allExamples.Add({__FILE__, name, bodyName}); }   \
+    initializerName() {                                                        \
+      okra::internals::allExamples.Add({__FILE__, name, bodyName});            \
+    }                                                                          \
   } initializerName##Instance;                                                 \
   void bodyName()
 
@@ -114,7 +117,7 @@ __declspec(selectany) Examples allExamples;
 #ifdef OKRA_MAIN
 
 int main(int argc, char **argv) {
-  okra::allExamples.RunAll();
+  okra::internals::allExamples.RunAll();
   return 0;
 }
 

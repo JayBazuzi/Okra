@@ -2,6 +2,7 @@
 
 #include "Okra.h"
 using namespace okra;
+using namespace okra::internals;
 
 Example("common root of two related paths") {
   auto result = get_common_root({R"(C:\foo\bar.cpp)", R"(C:\foo\qux\baz.cpp)"});
