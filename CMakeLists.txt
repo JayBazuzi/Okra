@@ -13,10 +13,11 @@ FILE(WRITE ${CMAKE_BINARY_DIR}/okra_main.cpp "
 ADD_EXECUTABLE(all_tests ${ALL_SOURCE_FILES} ${CMAKE_BINARY_DIR}/okra_main.cpp)
 
 FOREACH(file ${ALL_SOURCE_FILES})
-    file(RELATIVE_PATH executablefile ${CMAKE_CURRENT_SOURCE_DIR} ${file})
+    FILE(RELATIVE_PATH executablefile ${CMAKE_CURRENT_SOURCE_DIR} ${file})
+    # https://cmake.org/cmake/help/v3.0/policy/CMP0037.html
     STRING(REPLACE ".cpp" "" executablefile ${executablefile} )
     STRING(REPLACE "/" "__" executablefile ${executablefile} )
-    STRING(REPLACE " " "_" executablefile ${executablefile} )
+    STRING(REGEX REPLACE "[^A-Za-z0-9_.+-]" "_" executablefile ${executablefile} )
     ADD_EXECUTABLE(${executablefile} ${file})
     TARGET_COMPILE_DEFINITIONS(${executablefile} PRIVATE OKRA_MAIN=1)
 ENDFOREACH(file)
