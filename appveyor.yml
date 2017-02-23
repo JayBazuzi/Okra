@@ -1,0 +1,7 @@
+image: Visual Studio 2015
+before_build:
+- cmd: cmake .
+build:
+  project: Project.sln
+test_script:
+- cmd: Debug\all_tests
