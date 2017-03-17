@@ -1,5 +1,3 @@
-#include "stdafx.h"
-
 #include "Okra.h"
 using namespace okra;
 using namespace okra::internals;

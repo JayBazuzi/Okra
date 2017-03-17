@@ -6,7 +6,6 @@ FILE(GLOB_RECURSE ALL_SOURCE_FILES
     "ConsoleApplication1/*.cpp"
     )
 FILE(WRITE ${CMAKE_BINARY_DIR}/okra_main.cpp "
-    #include \"stdafx.h\"
     #define OKRA_MAIN 1
     #include \"Okra.h\"
     ")
