@@ -1,4 +1,12 @@
+# CMake
 .build/
+*proj
+*proj.filters
+*.sln
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+okra_main.cpp
 
 # User-specific files
 *.suo
