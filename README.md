@@ -10,12 +10,14 @@ Well, it will be. Right now we're just playing with ideas. Got an idea or wish? 
 
 ## Syntax
 
+```
 // make_path_relative.cpp
 Example("returns the given path relative to the base")
 {
     auto result = make_path_relative(R"(C:\foo)", R"(C:\foo\qux\baz.cpp)");
     AssertEqual(result.string(), string(R"(qux\baz.cpp)"));
 }
+```
 
 ## Design goals:
 
