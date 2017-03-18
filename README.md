@@ -1,5 +1,7 @@
 # Okra
 
+[![Build status](https://ci.appveyor.com/api/projects/status/u80a5vwc2ru4mu0k/branch/master?svg=true)](https://ci.appveyor.com/project/JayBazuzi/okra/branch/master)
+
 ## What is it?
 
 Okra is a TDD/BDD testing framework for C++. 
