@@ -90,9 +90,7 @@ public:
   }
 };
 
-// consider using __attribute__((weak)) and maybe #pragma comment(linker,
-// "/alternatename:_pWeakValue=_pDefaultWeakValue")
-__declspec(selectany) Examples allExamples;
+Examples allExamples;
 }
 }
 

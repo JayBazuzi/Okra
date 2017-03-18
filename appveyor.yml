@@ -4,4 +4,4 @@ before_build:
 build:
   project: Project.sln
 test_script:
-- cmd: Debug\all_tests
+- cmd: ctest
