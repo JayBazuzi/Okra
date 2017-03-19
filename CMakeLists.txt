@@ -5,11 +5,11 @@ enable_testing ()
 include_directories(AFTER ${CMAKE_CURRENT_SOURCE_DIR})
 
 FILE(GLOB_RECURSE ALL_SOURCE_FILES 
-    "ConsoleApplication1/*.cpp"
+    "Tests/*.cpp"
     )
 
 FOREACH(file ${ALL_SOURCE_FILES})
-    FILE(RELATIVE_PATH executablefile ${CMAKE_CURRENT_SOURCE_DIR}/ConsoleApplication1 ${file})
+    FILE(RELATIVE_PATH executablefile ${CMAKE_CURRENT_SOURCE_DIR}/Tests ${file})
     # https://cmake.org/cmake/help/v3.0/policy/CMP0037.html
     STRING(REPLACE ".cpp" "" executablefile ${executablefile} )
     STRING(REPLACE "/" "__" executablefile ${executablefile} )
