@@ -2,7 +2,7 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.2.2)
 
 set( CMAKE_CXX_STANDARD 14 )
 enable_testing ()
-include_directories(AFTER ${CMAKE_CURRENT_SOURCE_DIR}/ConsoleApplication1)
+include_directories(AFTER ${CMAKE_CURRENT_SOURCE_DIR})
 
 FILE(GLOB_RECURSE ALL_SOURCE_FILES 
     "ConsoleApplication1/*.cpp"
