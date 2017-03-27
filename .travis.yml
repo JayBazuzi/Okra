@@ -30,7 +30,6 @@ matrix:
        - ubuntu-toolchain-r-test
       packages:
        - g++-6
-       - p7zip-full
   - os: linux
     compiler: g++
     env: COMPILER=g++-5 BUILD=Debug ARCH=64
