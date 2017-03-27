@@ -3,9 +3,6 @@ dist: trusty
 
 language: cpp
 
-before_install:
-  - sudo apt-get update -qq
-
 script:
   - mkdir build
   - cd build
