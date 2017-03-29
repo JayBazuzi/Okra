@@ -3,4 +3,3 @@
 Example("compiles without error") {
   okra::AssertEqual(1, 1);
 }
-}

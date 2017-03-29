@@ -99,7 +99,6 @@ Examples allExamples;
 #define OKRA_Example__(name, counter)                                          \
   OKRA_Example___(name, Example##counter, ExampleInitializer##counter)
 #define OKRA_Example___(name, bodyName, initializerName)                       \
-  namespace {                                                                  \
   void bodyName();                                                             \
   struct initializerName {                                                     \
     initializerName() {                                                        \
