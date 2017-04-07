@@ -48,7 +48,7 @@ inline std::experimental::filesystem::path
 get_test_name_from_path(const std::experimental::filesystem::path &base,
                         std::experimental::filesystem::path file) {
   return std::experimental::filesystem::path(
-      file.replace_extension().string().substr(base.string().length() + 1));
+      file.replace_extension().string().substr(base.string().length()));
 }
 
 struct Example {
