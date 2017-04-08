@@ -32,3 +32,11 @@ Example("the body of a test that takes no time is timed correctly") {
     AssertEqual(time_to_execute_microseconds<Clock>([](){}), 0);
 }
 
+Example("the body of a test that takes < 1 ms time is timed correctly") {
+    AssertEqual(time_to_execute_microseconds<Clock>([](){Clock::advance(std::chrono::microseconds(100));}), 100);
+}
+
+Example("the body of a test that takes > 1 ms time is timed correctly") {
+    AssertEqual(time_to_execute_microseconds<Clock>([](){Clock::advance(std::chrono::microseconds(1009));}), 1009);
+}
+
