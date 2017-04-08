@@ -58,8 +58,10 @@ struct Example {
 
   void Run(std::experimental::filesystem::path base) const {
     std::cout << get_test_name_from_path(base, file) << " - " << name;
+    auto begin = std::chrono::high_resolution_clock::now();
     body();
-    std::cout << std::endl;
+    auto end = std::chrono::high_resolution_clock::now();
+    std::cout << " (" << std::chrono::duration_cast<std::chrono::microseconds>(end-begin).count() / 1000.0 << " ms)" << std::endl;
   }
 };
 
