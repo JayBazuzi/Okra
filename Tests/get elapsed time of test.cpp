@@ -14,7 +14,6 @@ class Clock {
         static void advance(duration d) noexcept {
             nowMicroseconds += d;
         }
-        static void reset_to_epoch() noexcept;
         static time_point now() noexcept {
             return nowMicroseconds;
         }
