@@ -15,7 +15,7 @@ namespace okra {
 template <class T, class U>
 void AssertEqual_(const T &t, const U &u, std::string message) {
   if (t != u) {
-    std::cout << message << " - assert FAILED - " << t << " != " << u
+    std::cout << ": " << message << " - assert FAILED - " << t << " != " << u
               << std::endl;
   }
 }
