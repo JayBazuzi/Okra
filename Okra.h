@@ -52,10 +52,11 @@ get_test_name_from_path(const std::experimental::filesystem::path &base,
       file.replace_extension().string().substr(base.string().length()));
 }
 
+template <typename TClock>
 long long time_to_execute_microseconds(const std::function<void(void)>& operation) {
-    auto begin = std::chrono::high_resolution_clock::now();
+    auto begin = TClock::now();
     operation();
-    auto end = std::chrono::high_resolution_clock::now();
+    auto end = TClock::now();
     return std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count();
 }
 
@@ -66,7 +67,7 @@ struct Example {
 
   void Run(std::experimental::filesystem::path base) const {
     std::cout << get_test_name_from_path(base, file) << " - " << name;
-    auto execution_time_ms = time_to_execute_microseconds(body) / 1000.0;
+    auto execution_time_ms = time_to_execute_microseconds<std::chrono::high_resolution_clock>(body) / 1000.0;
     std::cout << " (" << execution_time_ms << " ms)" << std::endl;
   }
 };
