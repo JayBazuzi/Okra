@@ -75,7 +75,7 @@ struct Example {
 template <typename TSource, typename TDestination>
 inline std::vector<TDestination>
 transform(const std::vector<TSource> &input,
-          const std::function<TDestination(TSource)> operation) {
+          const std::function<TDestination(TSource)>& operation) {
   std::vector<TDestination> result;
   std::transform(input.cbegin(), input.cend(), std::back_inserter(result),
                  operation);
