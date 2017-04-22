@@ -120,11 +120,7 @@ Examples allExamples;
 #define Example OKRA_Example
 #endif
 
-#ifdef OKRA_MAIN
-
 int main(int argc, char **argv) {
   okra::internals::allExamples.RunAll();
   return 0;
 }
-
-#endif
