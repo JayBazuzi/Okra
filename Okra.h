@@ -40,12 +40,6 @@ get_common_root2(const std::experimental::filesystem::path &path1,
 }
 
 inline std::experimental::filesystem::path
-get_common_root(std::vector<std::experimental::filesystem::path> paths) {
-  return std::accumulate(next(paths.begin()), paths.end(),
-                         paths.front().remove_filename(), get_common_root2);
-}
-
-inline std::experimental::filesystem::path
 get_test_name_from_path(const std::experimental::filesystem::path &base,
                         std::experimental::filesystem::path file) {
   return std::experimental::filesystem::path(
@@ -65,8 +59,8 @@ struct Example {
   std::string name;
   std::function<void(void)> body;
 
-  void Run(std::experimental::filesystem::path base) const {
-    std::cout << get_test_name_from_path(base, file) << " - " << name;
+  void Run() const {
+    std::cout << name;
     auto execution_time_ms = time_to_execute_microseconds<std::chrono::high_resolution_clock>(body) / 1000.0;
     std::cout << " (" << execution_time_ms << " ms)" << std::endl;
   }
@@ -89,12 +83,8 @@ public:
   void Add(Example example) { examples.push_back(example); }
 
   void RunAll() const {
-    auto maximumSharedFilePrefix =
-        get_common_root(transform<Example, std::experimental::filesystem::path>(
-            examples, [](const auto &_) { return _.file; }));
-
     for (const auto &example : examples) {
-      example.Run(maximumSharedFilePrefix);
+      example.Run();
     }
   }
 };
