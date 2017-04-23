@@ -11,13 +11,15 @@
 
 #include <experimental/filesystem>
 
-#define AssertEqual(t1, t2) AssertEqual_((t1), (t2), #t1 " == " #t2)
+#define AssertEqual(t1, t2) AssertEqual_((t1), (t2), #t1 " == " #t2, OKRA_pass)
 namespace okra {
 template <class T, class U>
-void AssertEqual_(const T &t, const U &u, std::string message) {
+void AssertEqual_(const T &t, const U &u, std::string message, bool &pass) {
+  pass = true;
   if (t != u) {
     std::cout << ": " << message << " - assert FAILED - " << t << " != " << u
               << std::endl;
+    pass = false;
   }
 }
 namespace internals {
@@ -47,29 +49,37 @@ get_test_name_from_path(const std::experimental::filesystem::path &base,
 }
 
 template <typename TClock>
-long long time_to_execute_microseconds(const std::function<void(void)>& operation) {
-    auto begin = TClock::now();
-    operation();
-    auto end = TClock::now();
-    return std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count();
+std::pair<long long, bool> time_to_execute_microseconds(
+    const std::function<void(bool &OKRA_pass)> &operation) {
+  auto begin = TClock::now();
+  bool pass;
+  operation(pass);
+  auto end = TClock::now();
+  auto duration =
+      std::chrono::duration_cast<std::chrono::microseconds>(end - begin);
+  return {duration.count(), pass};
 }
 
 struct Example {
   std::experimental::filesystem::path file;
   std::string name;
-  std::function<void(void)> body;
+  std::function<void(bool &)> body;
 
-  void Run() const {
+  bool Run() const {
     std::cout << name;
-    auto execution_time_ms = time_to_execute_microseconds<std::chrono::high_resolution_clock>(body) / 1000.0;
-    std::cout << " (" << execution_time_ms << " ms)" << std::endl;
+    bool pass;
+    long long execution_time_us;
+    std::tie(execution_time_us, pass) =
+        time_to_execute_microseconds<std::chrono::high_resolution_clock>(body);
+    std::cout << " (" << (execution_time_us / 1000.0) << " ms)" << std::endl;
+    return pass;
   }
 };
 
 template <typename TSource, typename TDestination>
 inline std::vector<TDestination>
 transform(const std::vector<TSource> &input,
-          const std::function<TDestination(TSource)>& operation) {
+          const std::function<TDestination(TSource)> &operation) {
   std::vector<TDestination> result;
   std::transform(input.cbegin(), input.cend(), std::back_inserter(result),
                  operation);
@@ -82,10 +92,13 @@ class Examples {
 public:
   void Add(Example example) { examples.push_back(example); }
 
-  void RunAll() const {
+  bool RunAll() const {
+    if (examples.empty()) { return false; }
+    bool pass = true;
     for (const auto &example : examples) {
-      example.Run();
+      pass &= example.Run();
     }
+    return pass;
   }
 };
 
@@ -98,19 +111,18 @@ Examples allExamples;
 #define OKRA_Example__(name, counter)                                          \
   OKRA_Example___(name, Example##counter, ExampleInitializer##counter)
 #define OKRA_Example___(name, bodyName, initializerName)                       \
-  void bodyName();                                                             \
+  void bodyName(bool &OKRA_pass);                                              \
   struct initializerName {                                                     \
     initializerName() {                                                        \
       okra::internals::allExamples.Add({__FILE__, name, bodyName});            \
     }                                                                          \
   } initializerName##Instance;                                                 \
-  void bodyName()
+  void bodyName(bool &OKRA_pass)
 
 #ifndef OKRA_DO_NOT_DEFINE_EXAMPLE
 #define Example OKRA_Example
 #endif
 
 int main(int argc, char **argv) {
-  okra::internals::allExamples.RunAll();
-  return 0;
+  return okra::internals::allExamples.RunAll() ? 0 : 1;
 }
