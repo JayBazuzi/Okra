@@ -10,15 +10,15 @@ Okra is a TDD/BDD testing framework for C++, so highly opinionated that you prob
 
 - Header only, so it's easy to adopt. (requires C++ 14 and std::experimental::filesystem)
 
-- Tndividual tests are named with strings, not C++ identifiers.
+- Individual tests are named with strings, not C++ identifiers.
 
-- Tests are collected by file and directory, not by C++ class.
+- Tests are organized by file and directory, not by C++ class.
 
 - Test names are not duplicated between code and file system. DRY.
 
 - Super-fast execution, thanks to compile-time test discovery. Important for microtesting.
 
-- Super-fast iteration when you only change one thing, thanks to separate executable per test file.
+- Super-fast iteration when you only change one thing, thanks to one executable per test file.
 
 - There's only one assertion (`AssertEqual()`). You should write your own custom in-domain assertions, e.g. `AssertUserIsLoggedIn()`
 
