@@ -96,7 +96,7 @@ namespace okra
 			std::vector<ExampleInfo> examples;
 
 		public:
-			void Add(ExampleInfo example) { examples.push_back(example); }
+			void Add(ExampleInfo exampleInfo) { examples.push_back(exampleInfo); }
 
 			bool RunAll() const
 			{
@@ -104,8 +104,8 @@ namespace okra
 					return false;
 				}
 				bool pass = true;
-				for (const auto &example : examples) {
-					pass &= example.Run();
+				for (const auto &exampleInfo : examples) {
+					pass &= exampleInfo.Run();
 				}
 				return pass;
 			}
