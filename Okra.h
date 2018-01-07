@@ -109,7 +109,7 @@ Examples allExamples;
 #define OKRA_Example(name) OKRA_Example_(name, __COUNTER__)
 #define OKRA_Example_(name, counter) OKRA_Example__(name, counter)
 #define OKRA_Example__(name, counter)                                          \
-  OKRA_Example___(name, Example##counter, ExampleInitializer##counter)
+  OKRA_Example___(name, EXAMPLE_##counter, ExampleInitializer##counter)
 #define OKRA_Example___(name, bodyName, initializerName)                       \
   void bodyName(bool &OKRA_pass);                                              \
   struct initializerName {                                                     \
@@ -120,7 +120,7 @@ Examples allExamples;
   void bodyName(bool &OKRA_pass)
 
 #ifndef OKRA_DO_NOT_DEFINE_EXAMPLE
-#define Example OKRA_Example
+#define EXAMPLE OKRA_Example
 #endif
 
 int main(int argc, char **argv) {

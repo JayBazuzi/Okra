@@ -27,15 +27,15 @@ class Clock {
 Clock::time_point Clock::nowMicroseconds;
 const bool Clock::is_steady = false;
 
-Example("the body of a test that takes no time is timed correctly") {
+EXAMPLE("the body of a test that takes no time is timed correctly") {
     AssertEqual(time_to_execute_microseconds<Clock>([](bool&){}).first, 0);
 }
 
-Example("the body of a test that takes < 1 ms time is timed correctly") {
+EXAMPLE("the body of a test that takes < 1 ms time is timed correctly") {
     AssertEqual(time_to_execute_microseconds<Clock>([](bool&){Clock::advance(std::chrono::microseconds(100));}).first, 100);
 }
 
-Example("the body of a test that takes > 1 ms time is timed correctly") {
+EXAMPLE("the body of a test that takes > 1 ms time is timed correctly") {
     AssertEqual(time_to_execute_microseconds<Clock>([](bool&){Clock::advance(std::chrono::microseconds(1009));}).first, 1009);
 }
 
