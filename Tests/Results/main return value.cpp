@@ -4,11 +4,11 @@ using namespace okra;
 using namespace okra::internals;
 
 void PassingExampleBody(bool &pass) { pass = true; }
-Example PassingExample{"/passing/example.cpp", "A passing example",
+ExampleInfo PassingExample{"/passing/example.cpp", "A passing example",
                        PassingExampleBody};
 
 void FailingExampleBody(bool &pass) { pass = false; }
-Example FailingExample{"/Failing/example.cpp", "A failing example",
+ExampleInfo FailingExample{"/Failing/example.cpp", "A failing example",
                        FailingExampleBody};
 
 #define AssertPassed(operation) AssertEqual(true, operation);

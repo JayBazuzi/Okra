@@ -60,7 +60,7 @@ std::pair<long long, bool> time_to_execute_microseconds(
   return {duration.count(), pass};
 }
 
-struct Example {
+struct ExampleInfo {
   std::experimental::filesystem::path file;
   std::string name;
   std::function<void(bool &)> body;
@@ -87,10 +87,10 @@ transform(const std::vector<TSource> &input,
 }
 
 class Examples {
-  std::vector<Example> examples;
+  std::vector<ExampleInfo> examples;
 
 public:
-  void Add(Example example) { examples.push_back(example); }
+  void Add(ExampleInfo example) { examples.push_back(example); }
 
   bool RunAll() const {
     if (examples.empty()) { return false; }
