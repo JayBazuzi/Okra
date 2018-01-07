@@ -14,21 +14,21 @@ ExampleInfo FailingExample{"/Failing/example.cpp", "A failing example",
 #define AssertPassed(operation) AssertEqual(true, operation);
 #define AssertFailed(operation) AssertEqual(false, operation);
 
-OKRA_Example("All tests successful") {
+OKRA_EXAMPLE("All tests successful") {
   Examples subject;
   subject.Add(PassingExample);
   subject.Add(PassingExample);
   AssertPassed(subject.RunAll());
 }
 
-OKRA_Example("A failing test") {
+OKRA_EXAMPLE("A failing test") {
   Examples subject;
   subject.Add(PassingExample);
   subject.Add(FailingExample);
   AssertFailed(subject.RunAll());
 }
 
-OKRA_Example("No tests found is a failure") {
+OKRA_EXAMPLE("No tests found is a failure") {
   Examples subject;
   AssertFailed(subject.RunAll());
 }

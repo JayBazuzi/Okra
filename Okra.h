@@ -106,11 +106,11 @@ Examples allExamples;
 }
 }
 
-#define OKRA_Example(name) OKRA_Example_(name, __COUNTER__)
-#define OKRA_Example_(name, counter) OKRA_Example__(name, counter)
-#define OKRA_Example__(name, counter)                                          \
-  OKRA_Example___(name, EXAMPLE_##counter, ExampleInitializer##counter)
-#define OKRA_Example___(name, bodyName, initializerName)                       \
+#define OKRA_EXAMPLE(name) OKRA_EXAMPLE_(name, __COUNTER__)
+#define OKRA_EXAMPLE_(name, counter) OKRA_EXAMPLE__(name, counter)
+#define OKRA_EXAMPLE__(name, counter)                                          \
+  OKRA_EXAMPLE___(name, EXAMPLE_##counter, ExampleInitializer##counter)
+#define OKRA_EXAMPLE___(name, bodyName, initializerName)                       \
   void bodyName(bool &OKRA_pass);                                              \
   struct initializerName {                                                     \
     initializerName() {                                                        \
@@ -120,7 +120,7 @@ Examples allExamples;
   void bodyName(bool &OKRA_pass)
 
 #ifndef OKRA_DO_NOT_DEFINE_EXAMPLE
-#define EXAMPLE OKRA_Example
+#define EXAMPLE OKRA_EXAMPLE
 #endif
 
 int main(int argc, char **argv) {
