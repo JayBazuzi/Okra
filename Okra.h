@@ -14,7 +14,7 @@
 namespace okra
 {
 	template <class T, class U>
-	void AssertEqual(const T &t, const U &u, const std::string& message, bool &pass)
+	void AssertEqual(const T &t, const U &u, const std::string &message, bool &pass)
 	{
 		pass = true;
 		if (t != u) {
@@ -22,6 +22,15 @@ namespace okra
 			pass = false;
 		}
 	}
+
+	struct ExampleInfo
+	{
+		std::experimental::filesystem::path file;
+		std::string name;
+		std::function<void(bool &)> body;
+
+		bool Run() const;
+	};
 
 	namespace internals
 	{
@@ -36,25 +45,21 @@ namespace okra
 			auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - begin);
 			return {duration.count(), pass};
 		}
+	}
 
-		struct ExampleInfo
-		{
-			std::experimental::filesystem::path file;
-			std::string name;
-			std::function<void(bool &)> body;
+	bool ExampleInfo::Run() const
+	{
+		std::cout << name;
+		bool pass;
+		long long execution_time_us;
+		std::tie(execution_time_us, pass) =
+		    internals::time_to_execute_microseconds<std::chrono::high_resolution_clock>(body);
+		std::cout << " (" << (execution_time_us / 1000.0) << " ms)" << std::endl;
+		return pass;
+	}
 
-			bool Run() const
-			{
-				std::cout << name;
-				bool pass;
-				long long execution_time_us;
-				std::tie(execution_time_us, pass) =
-				    time_to_execute_microseconds<std::chrono::high_resolution_clock>(body);
-				std::cout << " (" << (execution_time_us / 1000.0) << " ms)" << std::endl;
-				return pass;
-			}
-		};
-
+	namespace internals
+	{
 		class Examples
 		{
 			std::vector<ExampleInfo> examples;
