@@ -116,6 +116,20 @@ namespace okra
 	}
 } // namespace okra
 
+#define OKRA_REGISTER_LISTENER(name) OKRA_REGISTER_LISTENER_(name, __COUNTER__)
+#define OKRA_REGISTER_LISTENER_(name, counter) OKRA_REGISTER_LISTENER__(name, counter)
+#define OKRA_REGISTER_LISTENER__(name, counter)                                                                        \
+	OKRA_REGISTER_LISTENER___(name, LISTENER_##counter, ListenerInitializer##counter)
+#define OKRA_REGISTER_LISTENER___(name, bodyName, initializerName)                                                     \
+	struct initializerName                                                                                         \
+	{                                                                                                              \
+		initializerName() { okra::RegisterListener<name>(); }                                                  \
+	} initializerName##Instance
+
+#ifndef OKRA_DO_NOT_DEFINE_REGISTER_LISTENER
+#define REGISTER_LISTENER OKRA_REGISTER_LISTENER
+#endif
+
 #define OKRA_EXAMPLE(name) OKRA_EXAMPLE_(name, __COUNTER__)
 #define OKRA_EXAMPLE_(name, counter) OKRA_EXAMPLE__(name, counter)
 #define OKRA_EXAMPLE__(name, counter) OKRA_EXAMPLE___(name, EXAMPLE_##counter, ExampleInitializer##counter)
@@ -137,8 +151,6 @@ namespace okra
 #define ASSERT_EQUAL OKRA_ASSERT_EQUAL
 #endif
 
-int main(int argc, char **argv)
-{
-	okra::RegisterListener<okra::internals::ConsoleListener>();
-	return okra::internals::allExamples.RunAll() ? 0 : 1;
-}
+OKRA_REGISTER_LISTENER(okra::internals::ConsoleListener);
+
+int main(int argc, char **argv) { return okra::internals::allExamples.RunAll() ? 0 : 1; }
