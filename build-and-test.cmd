@@ -1,10 +1,18 @@
 @SETLOCAL
 @ECHO OFF
+
 @IF NOT EXIST .build mkdir .build
-call :exec cd .build
-call :exec cmake -Werror=dev -Werror=deprecated "%~dp0"
-call :exec cmake --build . -- /verbosity:minimal
-call :exec ctest --verbose
+cd .build
+
+call :exec cmake ..
+if ERRORLEVEL 1 goto :EOF
+
+call :exec cmake --build .
+if ERRORLEVEL 1 goto :EOF
+
+call :exec ctest
+if ERRORLEVEL 1 goto :EOF
+
 goto :EOF
 
     :exec
