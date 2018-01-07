@@ -25,14 +25,6 @@ namespace okra
 
 	namespace internals
 	{
-		inline std::experimental::filesystem::path
-		get_test_name_from_path(const std::experimental::filesystem::path &base,
-		                        std::experimental::filesystem::path file)
-		{
-			return std::experimental::filesystem::path(
-			    file.replace_extension().string().substr(base.string().length()));
-		}
-
 		template <typename TClock>
 		std::pair<long long, bool>
 		time_to_execute_microseconds(const std::function<void(bool &OKRA_pass)> &operation)
