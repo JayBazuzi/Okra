@@ -26,25 +26,6 @@ namespace okra
 	namespace internals
 	{
 		inline std::experimental::filesystem::path
-		get_common_root2(const std::experimental::filesystem::path &path1,
-		                 const std::experimental::filesystem::path &path2)
-		{
-			std::experimental::filesystem::path common;
-			auto iter1 = path1.begin();
-			auto iter2 = path2.begin();
-			while (iter1 != path1.end() && iter2 != path2.end()) {
-				if (*iter1 != *iter2) {
-					break;
-				}
-				common /= *iter1;
-				iter1++;
-				iter2++;
-			}
-
-			return common;
-		}
-
-		inline std::experimental::filesystem::path
 		get_test_name_from_path(const std::experimental::filesystem::path &base,
 		                        std::experimental::filesystem::path file)
 		{
