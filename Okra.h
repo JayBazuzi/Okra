@@ -36,6 +36,7 @@ namespace okra
 	{
 	public:
 		virtual void OnStart(const ExampleInfo &exampleInfo) = 0;
+		virtual void OnEnd(const ExampleInfo &exampleInfo, long long execution_time_us) = 0;
 	};
 
 	namespace internals
@@ -56,6 +57,10 @@ namespace okra
 		{
 		public:
 			void OnStart(const ExampleInfo &exampleInfo) override { std::cout << exampleInfo.name; }
+			void OnEnd(const ExampleInfo &exampleInfo, long long execution_time_us) override
+			{
+				std::cout << " (" << (execution_time_us / 1000.0) << " ms)" << std::endl;
+			}
 		};
 
 		static std::vector<std::shared_ptr<IListener>> listeners;
@@ -71,7 +76,11 @@ namespace okra
 		long long execution_time_us;
 		std::tie(execution_time_us, pass) =
 		    internals::time_to_execute_microseconds<std::chrono::high_resolution_clock>(body);
-		std::cout << " (" << (execution_time_us / 1000.0) << " ms)" << std::endl;
+
+		for (const auto &listener : internals::listeners) {
+			listener->OnEnd(*this, execution_time_us);
+		}
+
 		return pass;
 	}
 
