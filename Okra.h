@@ -32,6 +32,12 @@ namespace okra
 		bool Run() const;
 	};
 
+	class IListener
+	{
+	public:
+		virtual void OnStart(const ExampleInfo &exampleInfo) = 0;
+	};
+
 	namespace internals
 	{
 		template <typename TClock>
@@ -45,11 +51,22 @@ namespace okra
 			auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - begin);
 			return {duration.count(), pass};
 		}
+
+		class ConsoleListener : public IListener
+		{
+		public:
+			void OnStart(const ExampleInfo &exampleInfo) override { std::cout << exampleInfo.name; }
+		};
+
+		static std::vector<std::shared_ptr<IListener>> listeners;
 	}
 
 	bool ExampleInfo::Run() const
 	{
-		std::cout << name;
+		for (const auto &listener : internals::listeners) {
+			listener->OnStart(*this);
+		}
+
 		bool pass;
 		long long execution_time_us;
 		std::tie(execution_time_us, pass) =
@@ -82,6 +99,12 @@ namespace okra
 
 		Examples allExamples;
 	} // namespace internals
+
+	template <class T>
+	void RegisterListener()
+	{
+		okra::internals::listeners.push_back(std::make_shared<T>());
+	}
 } // namespace okra
 
 #define OKRA_EXAMPLE(name) OKRA_EXAMPLE_(name, __COUNTER__)
@@ -105,4 +128,8 @@ namespace okra
 #define ASSERT_EQUAL OKRA_ASSERT_EQUAL
 #endif
 
-int main(int argc, char **argv) { return okra::internals::allExamples.RunAll() ? 0 : 1; }
+int main(int argc, char **argv)
+{
+	okra::RegisterListener<okra::internals::ConsoleListener>();
+	return okra::internals::allExamples.RunAll() ? 0 : 1;
+}
