@@ -11,8 +11,8 @@ void FailingExampleBody(bool &pass) { pass = false; }
 ExampleInfo FailingExample{"/Failing/example.cpp", "A failing example",
                        FailingExampleBody};
 
-#define AssertPassed(operation) AssertEqual(true, operation);
-#define AssertFailed(operation) AssertEqual(false, operation);
+#define AssertPassed(operation) ASSERT_EQUAL(true, operation);
+#define AssertFailed(operation) ASSERT_EQUAL(false, operation);
 
 OKRA_EXAMPLE("All tests successful") {
   Examples subject;

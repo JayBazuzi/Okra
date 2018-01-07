@@ -1,5 +1,5 @@
 #include "Okra.h"
 
 EXAMPLE("compiles without error") {
-  okra::AssertEqual(1, 1);
+  ASSERT_EQUAL(1, 1);
 }

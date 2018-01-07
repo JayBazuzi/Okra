@@ -11,12 +11,10 @@
 
 #include <experimental/filesystem>
 
-#define AssertEqual(t1, t2) AssertEqual_((t1), (t2), #t1 " == " #t2, OKRA_pass)
-
 namespace okra
 {
 	template <class T, class U>
-	void AssertEqual_(const T &t, const U &u, std::string message, bool &pass)
+	void AssertEqual(const T &t, const U &u, std::string message, bool &pass)
 	{
 		pass = true;
 		if (t != u) {
@@ -130,6 +128,12 @@ namespace okra
 
 #ifndef OKRA_DO_NOT_DEFINE_EXAMPLE
 #define EXAMPLE OKRA_EXAMPLE
+#endif
+
+#define OKRA_ASSERT_EQUAL(t1, t2) okra::AssertEqual((t1), (t2), #t1 " == " #t2, OKRA_pass)
+
+#ifndef OKRA_DO_NOT_DEFINE_ASSERT_EQUAL
+#define ASSERT_EQUAL OKRA_ASSERT_EQUAL
 #endif
 
 int main(int argc, char **argv) { return okra::internals::allExamples.RunAll() ? 0 : 1; }

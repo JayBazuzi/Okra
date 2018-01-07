@@ -2,5 +2,5 @@
 using namespace okra;
 
 EXAMPLE("compiles without error") {
-    AssertEqual(1, 1);
+    ASSERT_EQUAL(1, 1);
 }
