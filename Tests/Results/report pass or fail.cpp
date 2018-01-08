@@ -14,14 +14,14 @@ ExampleInfo FailingExample{"/Failing/example.cpp", "A failing example",
 #define AssertPassed(operation) ASSERT_EQUAL(true, operation);
 #define AssertFailed(operation) ASSERT_EQUAL(false, operation);
 
-OKRA_EXAMPLE("All tests successful") {
+OKRA_EXAMPLE("Multiple successful tests = pass") {
   Examples subject;
   subject.Add(PassingExample);
   subject.Add(PassingExample);
   AssertPassed(subject.RunAll());
 }
 
-OKRA_EXAMPLE("A failing test") {
+OKRA_EXAMPLE("Any test fails = fail") {
   Examples subject;
   subject.Add(PassingExample);
   subject.Add(FailingExample);
