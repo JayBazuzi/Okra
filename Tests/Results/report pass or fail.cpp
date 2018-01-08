@@ -11,6 +11,10 @@ void FailingExampleBody(bool &pass) { pass = false; }
 ExampleInfo FailingExample{"/Failing/example.cpp", "A failing example",
                        FailingExampleBody};
 
+void FailInTryCatchExampleBody(bool &pass) { pass = false; }
+ExampleInfo FailInTryCatchExample{"/FailInTryCatch/example.cpp", "A failing example",
+                       FailInTryCatchExampleBody};
+
 #define AssertPassed(operation) ASSERT_EQUAL(true, operation);
 #define AssertFailed(operation) ASSERT_EQUAL(false, operation);
 
@@ -31,4 +35,8 @@ OKRA_EXAMPLE("Any test fails = fail") {
 OKRA_EXAMPLE("No tests found is a failure") {
   Examples subject;
   AssertFailed(subject.RunAll());
+}
+
+OKRA_EXAMPLE("Assertions work in try/catch") {
+  AssertFailed(FailInTryCatchExample.Run());
 }
