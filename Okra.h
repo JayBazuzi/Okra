@@ -5,11 +5,11 @@
 #include <functional>
 #include <iostream>
 #include <iterator>
+#include <memory>
 #include <numeric>
 #include <string>
 #include <vector>
 
-#include <experimental/filesystem>
 
 namespace okra
 {
@@ -25,7 +25,7 @@ namespace okra
 
 	struct ExampleInfo
 	{
-		std::experimental::filesystem::path file;
+		std::string file_path;
 		std::string name;
 		std::function<void(bool &)> body;
 
