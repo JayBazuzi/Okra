@@ -10,7 +10,6 @@
 #include <string>
 #include <vector>
 
-
 namespace okra
 {
 	template <class T, class U>
@@ -25,9 +24,9 @@ namespace okra
 
 	struct ExampleInfo
 	{
-		std::string file_path;
-		std::string name;
-		std::function<void(bool &)> body;
+		const std::string file_path;
+		const std::string name;
+		const std::function<void(bool &)> body;
 
 		bool Run() const;
 	};
