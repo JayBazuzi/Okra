@@ -140,14 +140,11 @@ namespace okra
 	} initializerName##Instance;                                                                                   \
 	void bodyName(bool &OKRA_pass)
 
-#ifndef OKRA_DO_NOT_DEFINE_EXAMPLE
-#define EXAMPLE OKRA_EXAMPLE
-#endif
-
 #define OKRA_ASSERT_EQUAL(t1, t2) okra::AssertEqual((t1), (t2), #t1 " == " #t2, OKRA_pass)
 
-#ifndef OKRA_DO_NOT_DEFINE_ASSERT_EQUAL
+#ifndef OKRA_DO_NOT_DEFINE_SHORT_NAMES
 #define ASSERT_EQUAL OKRA_ASSERT_EQUAL
+#define EXAMPLE OKRA_EXAMPLE
 #endif
 
 OKRA_REGISTER_LISTENER(okra::internals::ConsoleListener);
