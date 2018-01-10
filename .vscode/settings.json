@@ -1,0 +1,5 @@
+{
+    "clang.cxxflags": [
+        "-I${workspaceRoot}"
+    ]
+}
