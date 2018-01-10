@@ -37,4 +37,4 @@ OKRA_EXAMPLE("No tests found is a failure")
 	AssertFailed(subject.RunAll());
 }
 
-OKRA_EXAMPLE("Assertions work in try/catch") { AssertFailed(FailInTryCatchExample.Run()); }
+OKRA_EXAMPLE("Assertions work in try/catch") { AssertFailed(FailInTryCatchExample.Run({})); }

@@ -23,20 +23,22 @@ namespace okra
 		}
 	}
 
-	struct ExampleInfo
-	{
-		const std::string file_path;
-		const std::string name;
-		const std::function<void(bool &)> body;
-
-		bool Run() const;
-	};
+	struct ExampleInfo;
 
 	class IListener
 	{
 	public:
 		virtual void OnStart(const ExampleInfo &exampleInfo) = 0;
 		virtual void OnEnd(const ExampleInfo &exampleInfo, long long execution_time_us) = 0;
+	};
+
+	struct ExampleInfo
+	{
+		const std::string file_path;
+		const std::string name;
+		const std::function<void(bool &)> body;
+
+		bool Run(const std::vector<std::shared_ptr<IListener>> &listeners) const;
 	};
 
 	namespace internals
@@ -81,9 +83,9 @@ namespace okra
 		static std::vector<std::shared_ptr<IListener>> listeners;
 	}
 
-	bool ExampleInfo::Run() const
+	bool ExampleInfo::Run(const std::vector<std::shared_ptr<IListener>> &listeners) const
 	{
-		for (const auto &listener : internals::listeners) {
+		for (const auto &listener : listeners) {
 			listener->OnStart(*this);
 		}
 
@@ -92,7 +94,7 @@ namespace okra
 		std::tie(execution_time_us, pass) =
 		    internals::time_to_execute_microseconds<std::chrono::high_resolution_clock>(body);
 
-		for (const auto &listener : internals::listeners) {
+		for (const auto &listener : listeners) {
 			listener->OnEnd(*this, execution_time_us);
 		}
 
@@ -115,7 +117,7 @@ namespace okra
 				}
 				bool pass = true;
 				for (const auto &exampleInfo : examples) {
-					pass &= exampleInfo.Run();
+					pass &= exampleInfo.Run(listeners);
 				}
 				return pass;
 			}
