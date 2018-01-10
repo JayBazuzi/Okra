@@ -20,7 +20,7 @@ Okra is a TDD/BDD testing framework for C++, so highly opinionated that you prob
 
 - Super-fast iteration when you only change one thing, thanks to one executable per test file.
 
-- There's only one assertion (`AssertEqual()`). You should write your own custom in-domain assertions, e.g. `AssertUserIsLoggedIn()`
+- Assertions are minimal. You should write your own custom in-domain assertions, e.g. `AssertUserIsLoggedIn()` instead of `Assert(...)`.
 
 - Use CMake and CTests
 

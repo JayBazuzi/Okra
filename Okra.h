@@ -12,13 +12,11 @@
 
 namespace okra
 {
-	template <class T, class U>
-	void AssertEqual(const T &t, const U &u, const std::string &message, bool &pass)
+	void AssertMessage(bool condition, const std::string &message, bool &pass)
 	{
 		pass = true;
-		if (t != u) {
-			std::cout << ": " << message << " - assert FAILED - '" << t << "' != '" << u << "'"
-			          << std::endl;
+		if (!condition) {
+			std::cout << ": " << " - assert FAILED - " << message << std::endl;
 			pass = false;
 		}
 	}
@@ -158,9 +156,11 @@ namespace okra
 	} initializerName##Instance;                                                                                   \
 	void bodyName(bool &OKRA_pass)
 
-#define OKRA_ASSERT_EQUAL(t1, t2) okra::AssertEqual((t1), (t2), #t1 " == " #t2, OKRA_pass)
+#define OKRA_ASSERT_MESSAGE(condition, message) okra::AssertMessage((condition), message, OKRA_pass)
+#define OKRA_ASSERT_EQUAL(t1, t2) OKRA_ASSERT_MESSAGE((t1) == (t2), "'" #t1 "' == '" #t2 "'")
 
 #ifndef OKRA_DO_NOT_DEFINE_SHORT_NAMES
+#define ASSERT_MESSAGE OKRA_ASSERT_MESSAGE
 #define ASSERT_EQUAL OKRA_ASSERT_EQUAL
 #define EXAMPLE OKRA_EXAMPLE
 #endif

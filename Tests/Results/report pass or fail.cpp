@@ -12,15 +12,15 @@ ExampleInfo FailingExample{"/Failing/example.cpp", "A failing example", FailingE
 void FailInTryCatchExampleBody(bool &pass) { pass = false; }
 ExampleInfo FailInTryCatchExample{"/FailInTryCatch/example.cpp", "A failing example", FailInTryCatchExampleBody};
 
-#define AssertPassed(operation) ASSERT_EQUAL(true, operation);
-#define AssertFailed(operation) ASSERT_EQUAL(false, operation);
+#define ASSERT_PASSED(operation) ASSERT_MESSAGE(operation, #operation " should pass");
+#define ASSERT_FAILED(operation) ASSERT_MESSAGE(!operation, #operation " should fail");
 
 OKRA_EXAMPLE("Multiple successful tests = pass")
 {
 	Examples subject;
 	subject.Add(PassingExample);
 	subject.Add(PassingExample);
-	AssertPassed(subject.RunAll());
+	ASSERT_PASSED(subject.RunAll());
 }
 
 OKRA_EXAMPLE("Any test fails = fail")
@@ -28,13 +28,13 @@ OKRA_EXAMPLE("Any test fails = fail")
 	Examples subject;
 	subject.Add(PassingExample);
 	subject.Add(FailingExample);
-	AssertFailed(subject.RunAll());
+	ASSERT_FAILED(subject.RunAll());
 }
 
 OKRA_EXAMPLE("No tests found is a failure")
 {
 	Examples subject;
-	AssertFailed(subject.RunAll());
+	ASSERT_FAILED(subject.RunAll());
 }
 
-OKRA_EXAMPLE("Assertions work in try/catch") { AssertFailed(FailInTryCatchExample.Run({})); }
+OKRA_EXAMPLE("Assertions work in try/catch") { ASSERT_FAILED(FailInTryCatchExample.Run({})); }
