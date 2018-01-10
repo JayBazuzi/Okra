@@ -17,7 +17,8 @@ namespace okra
 	{
 		pass = true;
 		if (t != u) {
-			std::cout << ": " << message << " - assert FAILED - " << t << " != " << u << std::endl;
+			std::cout << ": " << message << " - assert FAILED - '" << t << "' != '" << u << "'"
+			          << std::endl;
 			pass = false;
 		}
 	}
@@ -52,13 +53,28 @@ namespace okra
 			return {duration.count(), pass};
 		}
 
-		class ConsoleListener : public IListener
+		class OStreamListener : public IListener
 		{
+			std::ostream &ostream;
+
 		public:
-			void OnStart(const ExampleInfo &exampleInfo) override { std::cout << exampleInfo.name; }
+			OStreamListener(std::ostream &ostream)
+			    : ostream(ostream)
+			{
+			}
+			void OnStart(const ExampleInfo &exampleInfo) override { ostream << exampleInfo.name; }
 			void OnEnd(const ExampleInfo &exampleInfo, long long execution_time_us) override
 			{
-				std::cout << " (" << (execution_time_us / 1000.0) << " ms)" << std::endl;
+				ostream << " (" << (execution_time_us / 1000.0) << " ms)" << std::endl;
+			}
+		};
+
+		class ConsoleListener : public OStreamListener
+		{
+		public:
+			ConsoleListener()
+			    : OStreamListener(std::cout)
+			{
 			}
 		};
 
