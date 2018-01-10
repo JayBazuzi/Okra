@@ -24,20 +24,20 @@ private:
 Clock::time_point Clock::nowMicroseconds;
 const bool Clock::is_steady = false;
 
-EXAMPLE("the body of a test that takes no time is timed correctly")
+TEST("the body of a test that takes no time is timed correctly")
 {
 	const auto result = time_to_execute_microseconds<Clock>([](bool &) {}).first;
 	ASSERT_EQUAL(0, result);
 }
 
-EXAMPLE("the body of a test that takes < 1 ms time is timed correctly")
+TEST("the body of a test that takes < 1 ms time is timed correctly")
 {
 	const auto result =
 	    time_to_execute_microseconds<Clock>([](bool &) { Clock::advance(std::chrono::microseconds(100)); }).first;
 	ASSERT_EQUAL(100, result);
 }
 
-EXAMPLE("the body of a test that takes > 1 ms time is timed correctly")
+TEST("the body of a test that takes > 1 ms time is timed correctly")
 {
 	const auto result =
 	    time_to_execute_microseconds<Clock>([](bool &) { Clock::advance(std::chrono::microseconds(1009)); }).first;

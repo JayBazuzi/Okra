@@ -21,16 +21,16 @@ namespace okra
 		}
 	}
 
-	struct ExampleInfo;
+	struct TestInfo;
 
 	class IListener
 	{
 	public:
-		virtual void OnStart(const ExampleInfo &exampleInfo) = 0;
-		virtual void OnEnd(const ExampleInfo &exampleInfo, long long execution_time_us) = 0;
+		virtual void OnStart(const TestInfo &testInfo) = 0;
+		virtual void OnEnd(const TestInfo &testInfo, long long execution_time_us) = 0;
 	};
 
-	struct ExampleInfo
+	struct TestInfo
 	{
 		const std::string file_path;
 		const std::string name;
@@ -62,8 +62,8 @@ namespace okra
 			    : ostream(ostream)
 			{
 			}
-			void OnStart(const ExampleInfo &exampleInfo) override { ostream << exampleInfo.name; }
-			void OnEnd(const ExampleInfo &exampleInfo, long long execution_time_us) override
+			void OnStart(const TestInfo &testInfo) override { ostream << testInfo.name; }
+			void OnEnd(const TestInfo &testInfo, long long execution_time_us) override
 			{
 				ostream << " (" << (execution_time_us / 1000.0) << " ms)" << std::endl;
 			}
@@ -81,7 +81,7 @@ namespace okra
 		static std::vector<std::shared_ptr<IListener>> listeners;
 	}
 
-	bool ExampleInfo::Run(const std::vector<std::shared_ptr<IListener>> &listeners) const
+	bool TestInfo::Run(const std::vector<std::shared_ptr<IListener>> &listeners) const
 	{
 		for (const auto &listener : listeners) {
 			listener->OnStart(*this);
@@ -101,27 +101,27 @@ namespace okra
 
 	namespace internals
 	{
-		class Examples
+		class Tests
 		{
-			std::vector<ExampleInfo> examples;
+			std::vector<TestInfo> tests;
 
 		public:
-			void Add(ExampleInfo exampleInfo) { examples.push_back(exampleInfo); }
+			void Add(TestInfo testInfo) { tests.push_back(testInfo); }
 
 			bool RunAll() const
 			{
-				if (examples.empty()) {
+				if (tests.empty()) {
 					return false;
 				}
 				bool pass = true;
-				for (const auto &exampleInfo : examples) {
-					pass &= exampleInfo.Run(listeners);
+				for (const auto &testInfo : tests) {
+					pass &= testInfo.Run(listeners);
 				}
 				return pass;
 			}
 		};
 
-		Examples allExamples;
+		Tests allTests;
 	} // namespace internals
 
 	template <class T>
@@ -145,14 +145,14 @@ namespace okra
 #define REGISTER_LISTENER OKRA_REGISTER_LISTENER
 #endif
 
-#define OKRA_EXAMPLE(name) OKRA_EXAMPLE_(name, __COUNTER__)
-#define OKRA_EXAMPLE_(name, counter) OKRA_EXAMPLE__(name, counter)
-#define OKRA_EXAMPLE__(name, counter) OKRA_EXAMPLE___(name, EXAMPLE_##counter, ExampleInitializer##counter)
-#define OKRA_EXAMPLE___(name, bodyName, initializerName)                                                               \
+#define OKRA_TEST(name) OKRA_TEST_(name, __COUNTER__)
+#define OKRA_TEST_(name, counter) OKRA_TEST__(name, counter)
+#define OKRA_TEST__(name, counter) OKRA_TEST___(name, TEST_##counter, TestInitializer##counter)
+#define OKRA_TEST___(name, bodyName, initializerName)                                                               \
 	void bodyName(bool &OKRA_pass);                                                                                \
 	struct initializerName                                                                                         \
 	{                                                                                                              \
-		initializerName() { okra::internals::allExamples.Add({__FILE__, name, bodyName}); }                    \
+		initializerName() { okra::internals::allTests.Add({__FILE__, name, bodyName}); }                    \
 	} initializerName##Instance;                                                                                   \
 	void bodyName(bool &OKRA_pass)
 
@@ -162,9 +162,9 @@ namespace okra
 #ifndef OKRA_DO_NOT_DEFINE_SHORT_NAMES
 #define ASSERT_MESSAGE OKRA_ASSERT_MESSAGE
 #define ASSERT_EQUAL OKRA_ASSERT_EQUAL
-#define EXAMPLE OKRA_EXAMPLE
+#define TEST OKRA_TEST
 #endif
 
 OKRA_REGISTER_LISTENER(okra::internals::ConsoleListener);
 
-int main(int argc, char **argv) { return okra::internals::allExamples.RunAll() ? 0 : 1; }
+int main(int argc, char **argv) { return okra::internals::allTests.RunAll() ? 0 : 1; }

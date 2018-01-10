@@ -4,18 +4,18 @@
 class StringListener : public okra::IListener
 {
 public:
-	std::vector<okra::ExampleInfo> starts;
-	void OnStart(const okra::ExampleInfo &exampleInfo) override { starts.push_back(exampleInfo); }
+	std::vector<okra::TestInfo> starts;
+	void OnStart(const okra::TestInfo &testInfo) override { starts.push_back(testInfo); }
 
-	std::vector<okra::ExampleInfo> ends;
-	void OnEnd(const okra::ExampleInfo &exampleInfo, long long c) override { ends.push_back(exampleInfo); }
+	std::vector<okra::TestInfo> ends;
+	void OnEnd(const okra::TestInfo &testInfo, long long c) override { ends.push_back(testInfo); }
 };
 
-EXAMPLE("when running an example")
+TEST("when running an test")
 {
 	auto string_listener = std::make_shared<StringListener>();
 
-	auto subject = okra::ExampleInfo({"example.cpp", "An example", [](const auto &) {}});
+	auto subject = okra::TestInfo({"test.cpp", "An test", [](const auto &) {}});
     subject.Run({string_listener});
 
 	ASSERT_EQUAL(1, string_listener->starts.size());

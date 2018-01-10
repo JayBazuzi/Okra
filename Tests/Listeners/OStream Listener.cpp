@@ -1,7 +1,7 @@
 #include "Okra.h"
 #include <sstream>
 
-EXAMPLE("prints the name of the test on start")
+TEST("prints the name of the test on start")
 {
 	std::stringstream result;
 	okra::internals::OStreamListener subject(result);
@@ -9,7 +9,7 @@ EXAMPLE("prints the name of the test on start")
 	ASSERT_EQUAL("a test", result.str());
 }
 
-EXAMPLE("prints the duration of the test on end")
+TEST("prints the duration of the test on end")
 {
 	std::stringstream result;
 	okra::internals::OStreamListener subject(result);
