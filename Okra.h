@@ -16,7 +16,8 @@ namespace okra
 	{
 		pass = true;
 		if (!condition) {
-			std::cout << ": " << " - assert FAILED - " << message << std::endl;
+			std::cout << ": "
+			          << " - assert FAILED - " << message << std::endl;
 			pass = false;
 		}
 	}
@@ -148,11 +149,11 @@ namespace okra
 #define OKRA_TEST(name) OKRA_TEST_(name, __COUNTER__)
 #define OKRA_TEST_(name, counter) OKRA_TEST__(name, counter)
 #define OKRA_TEST__(name, counter) OKRA_TEST___(name, TEST_##counter, TestInitializer##counter)
-#define OKRA_TEST___(name, bodyName, initializerName)                                                               \
+#define OKRA_TEST___(name, bodyName, initializerName)                                                                  \
 	void bodyName(bool &OKRA_pass);                                                                                \
 	struct initializerName                                                                                         \
 	{                                                                                                              \
-		initializerName() { okra::internals::allTests.Add({__FILE__, name, bodyName}); }                    \
+		initializerName() { okra::internals::allTests.Add({__FILE__, name, bodyName}); }                       \
 	} initializerName##Instance;                                                                                   \
 	void bodyName(bool &OKRA_pass)
 

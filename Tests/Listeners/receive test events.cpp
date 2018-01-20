@@ -16,10 +16,10 @@ TEST("when running an test")
 	auto string_listener = std::make_shared<StringListener>();
 
 	auto subject = okra::TestInfo({"test.cpp", "An test", [](const auto &) {}});
-    subject.Run({string_listener});
+	subject.Run({string_listener});
 
 	ASSERT_EQUAL(1, string_listener->starts.size());
-    ASSERT_EQUAL(subject.name, string_listener->starts[0].name);
+	ASSERT_EQUAL(subject.name, string_listener->starts[0].name);
 	ASSERT_EQUAL(1, string_listener->ends.size());
-    ASSERT_EQUAL(subject.name, string_listener->ends[0].name);
+	ASSERT_EQUAL(subject.name, string_listener->ends[0].name);
 }

@@ -13,6 +13,7 @@ script:
 
 matrix:
  include:
+
   - os: linux
     compiler: g++
     env: COMPILER=g++-6 BUILD=Debug ARCH=64
@@ -22,6 +23,7 @@ matrix:
        - ubuntu-toolchain-r-test
       packages:
        - g++-6
+
   - os: linux
     compiler: g++
     env: COMPILER=g++-6 BUILD=Release ARCH=64
@@ -31,6 +33,7 @@ matrix:
        - ubuntu-toolchain-r-test
       packages:
        - g++-6
+
   - os: linux
     compiler: g++
     env: COMPILER=g++-5 BUILD=Debug ARCH=64
@@ -40,6 +43,7 @@ matrix:
        - ubuntu-toolchain-r-test
       packages:
        - g++-5
+
   - os: linux
     compiler: g++
     env: COMPILER=g++-5 BUILD=Release ARCH=64
@@ -49,3 +53,13 @@ matrix:
        - ubuntu-toolchain-r-test
       packages:
        - g++-5
+
+  - os: linux
+    env: NAME="clang-format"
+    addons:
+      apt:
+        packages:
+          - clang-format-3.9
+    script: 
+      - .travis/clang-format.sh
+
