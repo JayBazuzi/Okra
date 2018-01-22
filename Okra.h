@@ -43,15 +43,13 @@ namespace okra
 	namespace internals
 	{
 		template <typename TClock>
-		std::pair<long long, bool>
-		time_to_execute_microseconds(const std::function<void(bool &OKRA_pass)> &operation)
+		long long time_to_execute_microseconds(const std::function<void()> &operation)
 		{
 			auto begin = TClock::now();
-			bool pass;
-			operation(pass);
+			operation();
 			auto end = TClock::now();
 			auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - begin);
-			return {duration.count(), pass};
+			return duration.count();
 		}
 
 		class OStreamListener : public IListener
@@ -90,8 +88,8 @@ namespace okra
 
 		bool pass;
 		long long execution_time_us;
-		std::tie(execution_time_us, pass) =
-		    internals::time_to_execute_microseconds<std::chrono::high_resolution_clock>(body);
+		execution_time_us =
+		    internals::time_to_execute_microseconds<std::chrono::high_resolution_clock>([&]() { body(pass); });
 
 		for (const auto &listener : listeners) {
 			listener->OnEnd(*this, execution_time_us);

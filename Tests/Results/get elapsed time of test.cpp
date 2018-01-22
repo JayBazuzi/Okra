@@ -26,20 +26,20 @@ const bool Clock::is_steady = false;
 
 TEST("the body of a test that takes no time is timed correctly")
 {
-	const auto result = time_to_execute_microseconds<Clock>([](bool &) {}).first;
+	const auto result = time_to_execute_microseconds<Clock>([]() {});
 	ASSERT_EQUAL(0, result);
 }
 
 TEST("the body of a test that takes < 1 ms time is timed correctly")
 {
 	const auto result =
-	    time_to_execute_microseconds<Clock>([](bool &) { Clock::advance(std::chrono::microseconds(100)); }).first;
+	    time_to_execute_microseconds<Clock>([]() { Clock::advance(std::chrono::microseconds(100)); });
 	ASSERT_EQUAL(100, result);
 }
 
 TEST("the body of a test that takes > 1 ms time is timed correctly")
 {
 	const auto result =
-	    time_to_execute_microseconds<Clock>([](bool &) { Clock::advance(std::chrono::microseconds(1009)); }).first;
+	    time_to_execute_microseconds<Clock>([]() { Clock::advance(std::chrono::microseconds(1009)); });
 	ASSERT_EQUAL(1009, result);
 }
