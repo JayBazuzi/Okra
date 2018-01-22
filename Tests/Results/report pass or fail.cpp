@@ -38,3 +38,14 @@ OKRA_TEST("No tests found is a failure")
 }
 
 OKRA_TEST("Assertions work in try/catch") { ASSERT_FAILED(FailInTryCatchTest.Run({})); }
+
+OKRA_TEST("Assertion failure ends the test")
+{
+	bool didTestContinue = false;
+	const auto body = [&](bool &OKRA_pass) {
+		ASSERT_EQUAL(42, 0);
+		didTestContinue = true;
+	};
+	TestInfo{"", "", body}.Run({});
+	ASSERT_EQUAL(false, didTestContinue);
+}

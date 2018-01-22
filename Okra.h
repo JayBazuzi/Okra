@@ -12,6 +12,13 @@
 
 namespace okra
 {
+	namespace internals
+	{
+		class AssertionFailedException
+		{
+		};
+	}
+
 	void AssertMessage(bool condition, const std::string &message, bool &pass)
 	{
 		pass = true;
@@ -19,6 +26,7 @@ namespace okra
 			std::cout << ": "
 			          << " - assert FAILED - " << message << std::endl;
 			pass = false;
+			throw internals::AssertionFailedException();
 		}
 	}
 
@@ -88,8 +96,16 @@ namespace okra
 
 		bool pass;
 		long long execution_time_us;
-		execution_time_us =
-		    internals::time_to_execute_microseconds<std::chrono::high_resolution_clock>([&]() { body(pass); });
+		execution_time_us = internals::time_to_execute_microseconds<std::chrono::high_resolution_clock>([&]() {
+			try
+			{
+				body(pass);
+			}
+			catch (...)
+			{
+				pass = false;
+			}
+		});
 
 		for (const auto &listener : listeners) {
 			listener->OnEnd(*this, execution_time_us);
