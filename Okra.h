@@ -172,11 +172,13 @@ namespace okra
 	void bodyName(bool &OKRA_pass)
 
 #define OKRA_ASSERT_MESSAGE(condition, message) okra::AssertMessage((condition), message, OKRA_pass)
-#define OKRA_ASSERT_EQUAL(t1, t2) OKRA_ASSERT_MESSAGE((t1) == (t2), "'" #t1 "' == '" #t2 "'")
+#define OKRA_ASSERT(condition) OKRA_ASSERT_MESSAGE((condition), #condition)
+#define OKRA_ASSERT_EQUAL(t1, t2) OKRA_ASSERT((t1) == (t2))
 
 #ifndef OKRA_DO_NOT_DEFINE_SHORT_NAMES
 #define ASSERT_MESSAGE OKRA_ASSERT_MESSAGE
 #define ASSERT_EQUAL OKRA_ASSERT_EQUAL
+#define ASSERT OKRA_ASSERT
 #define TEST OKRA_TEST
 #endif
 
