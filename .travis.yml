@@ -54,6 +54,9 @@ matrix:
       packages:
        - g++-5
 
+  - os: osx
+    osx_image: xcode8
+
   - os: linux
     env: NAME="clang-format"
     addons:
