@@ -156,10 +156,6 @@ namespace okra
 		initializerName() { okra::RegisterListener<name>(); }                                                  \
 	} initializerName##Instance
 
-#ifndef OKRA_DO_NOT_DEFINE_REGISTER_LISTENER
-#define REGISTER_LISTENER OKRA_REGISTER_LISTENER
-#endif
-
 #define OKRA_TEST(name) OKRA_TEST_(name, __COUNTER__)
 #define OKRA_TEST_(name, counter) OKRA_TEST__(name, counter)
 #define OKRA_TEST__(name, counter) OKRA_TEST___(name, TEST_##counter, TestInitializer##counter)
@@ -180,6 +176,7 @@ namespace okra
 #define ASSERT_EQUAL OKRA_ASSERT_EQUAL
 #define ASSERT OKRA_ASSERT
 #define TEST OKRA_TEST
+#define REGISTER_LISTENER OKRA_REGISTER_LISTENER
 #endif
 
 OKRA_REGISTER_LISTENER(okra::internals::ConsoleListener);
