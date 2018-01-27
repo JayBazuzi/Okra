@@ -17,16 +17,15 @@ namespace okra
 		class AssertionFailedException
 		{
 		};
-	}
-
-	void AssertMessage(bool condition, const std::string &message, bool &pass)
-	{
-		pass = true;
-		if (!condition) {
-			std::cout << ": "
-			          << " - assert FAILED - " << message << std::endl;
-			pass = false;
-			throw internals::AssertionFailedException();
+		void AssertMessage(bool condition, const std::string &message, bool &pass)
+		{
+			pass = true;
+			if (!condition) {
+				std::cout << ": "
+				          << " - assert FAILED - " << message << std::endl;
+				pass = false;
+				throw AssertionFailedException();
+			}
 		}
 	}
 
@@ -167,7 +166,7 @@ namespace okra
 	} initializerName##Instance;                                                                                   \
 	void bodyName(bool &OKRA_pass)
 
-#define OKRA_ASSERT_MESSAGE(condition, message) okra::AssertMessage((condition), message, OKRA_pass)
+#define OKRA_ASSERT_MESSAGE(condition, message) okra::internals::AssertMessage((condition), message, OKRA_pass)
 #define OKRA_ASSERT(condition) OKRA_ASSERT_MESSAGE((condition), #condition)
 #define OKRA_ASSERT_EQUAL(t1, t2) OKRA_ASSERT((t1) == (t2))
 
