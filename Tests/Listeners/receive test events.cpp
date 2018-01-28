@@ -9,6 +9,8 @@ public:
 
 	std::vector<okra::TestInfo> ends;
 	void OnEnd(const okra::TestInfo &testInfo, long long c) override { ends.push_back(testInfo); }
+
+	void OnFail(const std::string &message) override {}
 };
 
 TEST("when running a test")

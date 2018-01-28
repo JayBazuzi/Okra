@@ -28,6 +28,7 @@ namespace okra
 	public:
 		virtual void OnStart(const TestInfo &testInfo) = 0;
 		virtual void OnEnd(const TestInfo &testInfo, long long execution_time_us) = 0;
+		virtual void OnFail(const std::string &message) = 0;
 	};
 
 	struct TestInfo
@@ -79,9 +80,14 @@ namespace okra
 
 		void Fail(const std::string &message)
 		{
-			std::cout << ": "
-			          << " - assert FAILED - " << std::endl
-			          << message << std::endl;
+			std::stringstream stringstream;
+			stringstream << ": "
+			             << " - assert FAILED - " << std::endl
+			             << message << std::endl;
+			for (const auto &listener : listeners) {
+				listener->OnFail(stringstream.str());
+			}
+
 			throw AssertionFailedException();
 		}
 
@@ -128,6 +134,7 @@ namespace okra
 			{
 				ostream << " (" << (execution_time_us / 1000.0) << " ms)" << std::endl;
 			}
+			void OnFail(const std::string &message) override { ostream << message; }
 		};
 
 		class ConsoleListener : public OStreamListener
