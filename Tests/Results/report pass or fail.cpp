@@ -9,7 +9,16 @@ TestInfo PassingTest{"/passing/test.cpp", "A passing test", PassingTestBody};
 void FailingTestBody(bool &pass) { pass = false; }
 TestInfo FailingTest{"/Failing/test.cpp", "A failing test", FailingTestBody};
 
-void FailInTryCatchTestBody(bool &pass) { pass = false; }
+void FailInTryCatchTestBody(bool &OKRA_pass)
+{
+	try
+	{
+		ASSERT(false);
+	}
+	catch (...)
+	{
+	}
+}
 TestInfo FailInTryCatchTest{"/FailInTryCatch/test.cpp", "A failing test", FailInTryCatchTestBody};
 
 #define ASSERT_PASSED(operation) ASSERT_MESSAGE(operation, #operation " should pass");
