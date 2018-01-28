@@ -11,9 +11,66 @@
 #include <string>
 #include <vector>
 
-
 namespace okra
 {
+	class IListener;
+	struct TestInfo;
+
+	namespace internals
+	{
+		template <typename TClock>
+		long long time_to_execute_microseconds(const std::function<void()> &operation);
+		static std::vector<std::shared_ptr<IListener>> listeners;
+	}
+
+	class IListener
+	{
+	public:
+		virtual void OnStart(const TestInfo &testInfo) = 0;
+		virtual void OnEnd(const TestInfo &testInfo, long long execution_time_us) = 0;
+	};
+
+	struct TestInfo
+	{
+		const std::string file_path;
+		const std::string name;
+		const std::function<void(bool &)> body;
+
+		bool Run(const std::vector<std::shared_ptr<IListener>> &listeners) const;
+	};
+
+	bool TestInfo::Run(const std::vector<std::shared_ptr<IListener>> &listeners) const
+	{
+		for (const auto &listener : listeners) {
+			listener->OnStart(*this);
+		}
+
+		bool pass;
+		long long execution_time_us;
+		execution_time_us = internals::time_to_execute_microseconds<std::chrono::high_resolution_clock>([&]() {
+			try
+			{
+				body(pass);
+			}
+			catch (...)
+			{
+				pass = false;
+			}
+		});
+
+		for (const auto &listener : listeners) {
+			listener->OnEnd(*this, execution_time_us);
+		}
+
+		return pass;
+	}
+
+	template <class T>
+	void RegisterListener()
+	{
+		okra::internals::listeners.push_back(std::make_shared<T>());
+	}
+
 	namespace internals
 	{
 		class AssertionFailedException
@@ -46,28 +103,7 @@ namespace okra
 			stringstream << "ACTUAL  : " << t2 << "(" << t2String << ")" << std::endl;
 			AssertMessage(t1 == t2, stringstream.str(), pass);
 		}
-	}
 
-	struct TestInfo;
-
-	class IListener
-	{
-	public:
-		virtual void OnStart(const TestInfo &testInfo) = 0;
-		virtual void OnEnd(const TestInfo &testInfo, long long execution_time_us) = 0;
-	};
-
-	struct TestInfo
-	{
-		const std::string file_path;
-		const std::string name;
-		const std::function<void(bool &)> body;
-
-		bool Run(const std::vector<std::shared_ptr<IListener>> &listeners) const;
-	};
-
-	namespace internals
-	{
 		template <typename TClock>
 		long long time_to_execute_microseconds(const std::function<void()> &operation)
 		{
@@ -103,37 +139,6 @@ namespace okra
 			}
 		};
 
-		static std::vector<std::shared_ptr<IListener>> listeners;
-	}
-
-	bool TestInfo::Run(const std::vector<std::shared_ptr<IListener>> &listeners) const
-	{
-		for (const auto &listener : listeners) {
-			listener->OnStart(*this);
-		}
-
-		bool pass;
-		long long execution_time_us;
-		execution_time_us = internals::time_to_execute_microseconds<std::chrono::high_resolution_clock>([&]() {
-			try
-			{
-				body(pass);
-			}
-			catch (...)
-			{
-				pass = false;
-			}
-		});
-
-		for (const auto &listener : listeners) {
-			listener->OnEnd(*this, execution_time_us);
-		}
-
-		return pass;
-	}
-
-	namespace internals
-	{
 		class Tests
 		{
 			std::vector<TestInfo> tests;
@@ -156,12 +161,6 @@ namespace okra
 
 		Tests allTests;
 	} // namespace internals
-
-	template <class T>
-	void RegisterListener()
-	{
-		okra::internals::listeners.push_back(std::make_shared<T>());
-	}
 } // namespace okra
 
 #define OKRA_REGISTER_LISTENER(name) OKRA_REGISTER_LISTENER_(name, __COUNTER__)
