@@ -7,8 +7,10 @@
 #include <iterator>
 #include <memory>
 #include <numeric>
+#include <sstream>
 #include <string>
 #include <vector>
+
 
 namespace okra
 {
@@ -21,7 +23,8 @@ namespace okra
 		void Fail(const std::string &message)
 		{
 			std::cout << ": "
-			          << " - assert FAILED - " << message << std::endl;
+			          << " - assert FAILED - " << std::endl
+			          << message << std::endl;
 			throw AssertionFailedException();
 		}
 
@@ -38,7 +41,10 @@ namespace okra
 		void AssertEqual(
 		    const T1 &t1, const T2 &t2, const std::string &t1String, const std::string &t2String, bool &pass)
 		{
-			AssertMessage(t1 == t2, "'" + t1String + "' == '" + t2String + "'", pass);
+			std::stringstream stringstream;
+			stringstream << "EXPECTED: " << t1 << "(" << t1String << ")" << std::endl;
+			stringstream << "ACTUAL  : " << t2 << "(" << t2String << ")" << std::endl;
+			AssertMessage(t1 == t2, stringstream.str(), pass);
 		}
 	}
 
