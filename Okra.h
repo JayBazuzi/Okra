@@ -33,6 +33,13 @@ namespace okra
 				Fail(message);
 			}
 		}
+
+		template <class T1, class T2>
+		void AssertEqual(
+		    const T1 &t1, const T2 &t2, const std::string &t1String, const std::string &t2String, bool &pass)
+		{
+			AssertMessage(t1 == t2, "'" + t1String + "' == '" + t2String + "'", pass);
+		}
 	}
 
 	struct TestInfo;
@@ -174,7 +181,7 @@ namespace okra
 
 #define OKRA_ASSERT_MESSAGE(condition, message) okra::internals::AssertMessage((condition), message, OKRA_pass)
 #define OKRA_ASSERT(condition) OKRA_ASSERT_MESSAGE((condition), #condition)
-#define OKRA_ASSERT_EQUAL(t1, t2) OKRA_ASSERT((t1) == (t2))
+#define OKRA_ASSERT_EQUAL(t1, t2) okra::internals::AssertEqual((t1), (t2), #t1, #t2, OKRA_pass)
 
 #ifndef OKRA_DO_NOT_DEFINE_SHORT_NAMES
 #define ASSERT_MESSAGE OKRA_ASSERT_MESSAGE
