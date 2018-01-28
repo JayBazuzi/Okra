@@ -17,14 +17,20 @@ namespace okra
 		class AssertionFailedException
 		{
 		};
+
+		void Fail(const std::string &message)
+		{
+			std::cout << ": "
+			          << " - assert FAILED - " << message << std::endl;
+			throw AssertionFailedException();
+		}
+
 		void AssertMessage(bool condition, const std::string &message, bool &pass)
 		{
 			pass = true;
 			if (!condition) {
-				std::cout << ": "
-				          << " - assert FAILED - " << message << std::endl;
 				pass = false;
-				throw AssertionFailedException();
+				Fail(message);
 			}
 		}
 	}
