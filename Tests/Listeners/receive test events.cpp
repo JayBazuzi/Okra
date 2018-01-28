@@ -11,7 +11,7 @@ public:
 	void OnEnd(const okra::TestInfo &testInfo, long long c) override { ends.push_back(testInfo); }
 };
 
-TEST("when running an test")
+TEST("when running a test")
 {
 	auto string_listener = std::make_shared<StringListener>();
 
