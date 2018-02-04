@@ -18,3 +18,11 @@ TEST("When a test fails, its result is printed to the screen with a detail messa
 	subject.OnFail("a detail message");
 	ASSERT_EQUAL("a detail message", result.str());
 }
+
+TEST("prints the duration of the test on end")
+{
+	std::stringstream result;
+	okra::internals::OStreamListener subject(result);
+	subject.OnEnd({"a test", []() {}}, std::chrono::milliseconds(42));
+	ASSERT_EQUAL(" (42ms)\n", result.str());
+}

@@ -33,11 +33,3 @@ TEST("prints the name of the test on start")
 	subject.OnStart({"a test", []() {}});
 	ASSERT_EQUAL("a test", result.str());
 }
-
-TEST("prints the duration of the test on end")
-{
-	std::stringstream result;
-	okra::internals::OStreamListener subject(result);
-	subject.OnEnd({"a test", []() {}}, std::chrono::milliseconds(42));
-	ASSERT_EQUAL(" (42ms)\n", result.str());
-}
