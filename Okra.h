@@ -3,9 +3,7 @@
 #include <chrono>
 #include <functional>
 #include <iostream>
-#include <iterator>
 #include <memory>
-#include <numeric>
 #include <sstream>
 #include <string>
 #include <vector>
