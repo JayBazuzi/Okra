@@ -17,11 +17,27 @@ TEST("when running a test")
 {
 	auto string_listener = std::make_shared<StringListener>();
 
-	auto subject = okra::TestInfo({"test.cpp", "A test", [](const auto &) {}});
+	auto subject = okra::TestInfo({"A test", []() {}});
 	subject.Run({string_listener});
 
 	ASSERT_EQUAL(1, string_listener->starts.size());
 	ASSERT_EQUAL(subject.name, string_listener->starts[0].name);
 	ASSERT_EQUAL(1, string_listener->ends.size());
 	ASSERT_EQUAL(subject.name, string_listener->ends[0].name);
+}
+
+TEST("prints the name of the test on start")
+{
+	std::stringstream result;
+	okra::internals::OStreamListener subject(result);
+	subject.OnStart({"a test", []() {}});
+	ASSERT_EQUAL("a test", result.str());
+}
+
+TEST("prints the duration of the test on end")
+{
+	std::stringstream result;
+	okra::internals::OStreamListener subject(result);
+	subject.OnEnd({"a test", []() {}}, 42);
+	ASSERT_EQUAL(" (0.042 ms)\n", result.str());
 }

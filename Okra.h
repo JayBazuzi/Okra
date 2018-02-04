@@ -33,9 +33,8 @@ namespace okra
 
 	struct TestInfo
 	{
-		const std::string file_path;
 		const std::string name;
-		const std::function<void(bool &)> body;
+		const std::function<void()> body;
 
 		bool Run(const std::vector<std::shared_ptr<IListener>> &listeners) const;
 	};
@@ -51,7 +50,8 @@ namespace okra
 		execution_time_us = internals::time_to_execute_microseconds<std::chrono::high_resolution_clock>([&]() {
 			try
 			{
-				body(pass);
+				body();
+				pass = true;
 			}
 			catch (...)
 			{
@@ -91,23 +91,21 @@ namespace okra
 			throw AssertionFailedException();
 		}
 
-		void AssertMessage(bool condition, const std::string &message, bool &pass)
+		void AssertMessage(bool condition, const std::string &message)
 		{
-			pass = true;
 			if (!condition) {
-				pass = false;
 				Fail(message);
 			}
 		}
 
 		template <class T1, class T2>
 		void AssertEqual(
-		    const T1 &t1, const T2 &t2, const std::string &t1String, const std::string &t2String, bool &pass)
+		    const T1 &t1, const T2 &t2, const std::string &t1String, const std::string &t2String)
 		{
 			std::stringstream stringstream;
 			stringstream << "EXPECTED: " << t1 << "(" << t1String << ")" << std::endl;
 			stringstream << "ACTUAL  : " << t2 << "(" << t2String << ")" << std::endl;
-			AssertMessage(t1 == t2, stringstream.str(), pass);
+			AssertMessage(t1 == t2, stringstream.str());
 		}
 
 		template <typename TClock>
@@ -153,7 +151,7 @@ namespace okra
 		public:
 			void Add(TestInfo testInfo) { tests.push_back(testInfo); }
 
-			bool RunAll() const
+			bool RunAll(const std::vector<std::shared_ptr<IListener>>& listeners) const
 			{
 				if (tests.empty()) {
 					return false;
@@ -184,25 +182,27 @@ namespace okra
 #define OKRA_TEST_(name, counter) OKRA_TEST__(name, counter)
 #define OKRA_TEST__(name, counter) OKRA_TEST___(name, TEST_##counter, TestInitializer##counter)
 #define OKRA_TEST___(name, bodyName, initializerName)                                                                  \
-	void bodyName(bool &OKRA_pass);                                                                                \
+	void bodyName();                                                                                               \
 	struct initializerName                                                                                         \
 	{                                                                                                              \
-		initializerName() { okra::internals::allTests.Add({__FILE__, name, bodyName}); }                       \
+		initializerName() { okra::internals::allTests.Add({name, bodyName}); }                                 \
 	} initializerName##Instance;                                                                                   \
-	void bodyName(bool &OKRA_pass)
+	void bodyName()
 
-#define OKRA_ASSERT_MESSAGE(condition, message) okra::internals::AssertMessage((condition), message, OKRA_pass)
+#define OKRA_ASSERT_MESSAGE(condition, message) okra::internals::AssertMessage((condition), message)
 #define OKRA_ASSERT(condition) OKRA_ASSERT_MESSAGE((condition), #condition)
-#define OKRA_ASSERT_EQUAL(t1, t2) okra::internals::AssertEqual((t1), (t2), #t1, #t2, OKRA_pass)
+#define OKRA_ASSERT_EQUAL(t1, t2) okra::internals::AssertEqual((t1), (t2), #t1, #t2)
+#define OKRA_FAIL(message) okra::internals::Fail((message))
 
 #ifndef OKRA_DO_NOT_DEFINE_SHORT_NAMES
 #define ASSERT_MESSAGE OKRA_ASSERT_MESSAGE
 #define ASSERT_EQUAL OKRA_ASSERT_EQUAL
 #define ASSERT OKRA_ASSERT
+#define FAIL OKRA_FAIL
 #define TEST OKRA_TEST
 #define REGISTER_LISTENER OKRA_REGISTER_LISTENER
 #endif
 
 OKRA_REGISTER_LISTENER(okra::internals::ConsoleListener);
 
-int main(int argc, char **argv) { return okra::internals::allTests.RunAll() ? 0 : 1; }
+int main(int argc, char **argv) { return okra::internals::allTests.RunAll(okra::internals::listeners) ? 0 : 1; }
