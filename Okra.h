@@ -17,15 +17,39 @@ namespace okra
 	{
 		template <typename TClock>
 		typename TClock::duration duration_to_execute(const std::function<void()> &operation);
-		static std::vector<std::shared_ptr<IListener>> listeners;
+
+		class Listeners
+		{
+			std::vector<std::shared_ptr<IListener>> listeners;
+
+		public:
+			Listeners() = default;
+			Listeners(std::initializer_list<std::shared_ptr<IListener>> l) { listeners = l; }
+			
+			void Register(std::shared_ptr<IListener> &&listener) { listeners.push_back(move(listener)); }
+			void SendOnStart(const TestInfo &testInfo) const;
+			void SendOnEnd(const TestInfo &testInfo,
+			               std::chrono::high_resolution_clock::duration duration) const;
+			void SendOnFail(const std::string &message) const;
+
+		} allListeners;
+
+		class AssertionFailedException
+		{
+		public:
+			const std::string message;
+			AssertionFailedException(const std::string &message)
+			    : message(message)
+			{
+			}
+		};
 	}
 
 	class IListener
 	{
 	public:
 		virtual void OnStart(const TestInfo &testInfo) = 0;
-		virtual void OnEnd(const TestInfo &testInfo,
-		                   std::chrono::high_resolution_clock::duration execution_time_us) = 0;
+		virtual void OnEnd(const TestInfo &testInfo, std::chrono::high_resolution_clock::duration duration) = 0;
 		virtual void OnFail(const std::string &message) = 0;
 	};
 
@@ -34,16 +58,14 @@ namespace okra
 		const std::string name;
 		const std::function<void()> body;
 
-		bool Run(const std::vector<std::shared_ptr<IListener>> &listeners) const;
+		bool Run(const internals::Listeners &listeners) const;
 	};
 
-	bool TestInfo::Run(const std::vector<std::shared_ptr<IListener>> &listeners) const
+	bool TestInfo::Run(const internals::Listeners &listeners) const
 	{
-		for (const auto &listener : listeners) {
-			listener->OnStart(*this);
-		}
+		listeners.SendOnStart(*this);
 
-		bool pass;
+		bool pass = false;
 		std::chrono::high_resolution_clock::duration execution_duration;
 		execution_duration = internals::duration_to_execute<std::chrono::high_resolution_clock>([&]() {
 			try
@@ -51,15 +73,17 @@ namespace okra
 				body();
 				pass = true;
 			}
+			catch (const internals::AssertionFailedException &exception)
+			{
+				listeners.SendOnFail(exception.message);
+			}
 			catch (...)
 			{
 				pass = false;
 			}
 		});
 
-		for (const auto &listener : listeners) {
-			listener->OnEnd(*this, execution_duration);
-		}
+		listeners.SendOnEnd(*this, execution_duration);
 
 		return pass;
 	}
@@ -67,26 +91,18 @@ namespace okra
 	template <class T>
 	void RegisterListener()
 	{
-		okra::internals::listeners.push_back(std::make_shared<T>());
+		internals::allListeners.Register(std::make_shared<T>());
 	}
 
 	namespace internals
 	{
-		class AssertionFailedException
-		{
-		};
-
 		void Fail(const std::string &message)
 		{
 			std::stringstream stringstream;
 			stringstream << ": "
 			             << " - assert FAILED - " << std::endl
 			             << message << std::endl;
-			for (const auto &listener : listeners) {
-				listener->OnFail(stringstream.str());
-			}
-
-			throw AssertionFailedException();
+			throw AssertionFailedException(stringstream.str());
 		}
 
 		void AssertMessage(bool condition, const std::string &message)
@@ -169,7 +185,7 @@ namespace okra
 		public:
 			void Add(TestInfo testInfo) { tests.push_back(testInfo); }
 
-			bool RunAll(const std::vector<std::shared_ptr<IListener>> &listeners) const
+			bool RunAll(const Listeners &listeners) const
 			{
 				if (tests.empty()) {
 					return false;
@@ -181,6 +197,26 @@ namespace okra
 				return pass;
 			}
 		};
+
+		void Listeners::SendOnStart(const TestInfo &testInfo) const
+		{
+			for (const auto &listener : listeners) {
+				listener->OnStart(testInfo);
+			}
+		}
+		void Listeners::SendOnEnd(const TestInfo &testInfo,
+		                          std::chrono::high_resolution_clock::duration duration) const
+		{
+			for (const auto &listener : listeners) {
+				listener->OnEnd(testInfo, duration);
+			}
+		}
+		void Listeners::SendOnFail(const std::string &message) const
+		{
+			for (const auto &listener : listeners) {
+				listener->OnFail(message);
+			}
+		}
 
 		Tests allTests;
 	} // namespace internals
@@ -226,4 +262,4 @@ namespace okra
 
 OKRA_REGISTER_LISTENER(okra::internals::ConsoleListener);
 
-int main(int argc, char **argv) { return okra::internals::allTests.RunAll(okra::internals::listeners) ? 0 : 1; }
+int main(int argc, char **argv) { return okra::internals::allTests.RunAll(okra::internals::allListeners) ? 0 : 1; }

@@ -13,7 +13,7 @@ public:
 	void OnFail(const std::string &message) override {}
 };
 
-TEST("when running a test")
+TEST("Events are fired when running a test")
 {
 	auto string_listener = std::make_shared<StringListener>();
 
