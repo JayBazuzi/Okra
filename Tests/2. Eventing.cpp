@@ -8,7 +8,7 @@ public:
 	void OnStart(const okra::TestInfo &testInfo) override { starts.push_back(testInfo); }
 
 	std::vector<okra::TestInfo> ends;
-	void OnEnd(const okra::TestInfo &testInfo, long long c) override { ends.push_back(testInfo); }
+	void OnEnd(const okra::TestInfo &testInfo, std::chrono::high_resolution_clock::duration duration) override { ends.push_back(testInfo); }
 
 	void OnFail(const std::string &message) override {}
 };
@@ -38,6 +38,6 @@ TEST("prints the duration of the test on end")
 {
 	std::stringstream result;
 	okra::internals::OStreamListener subject(result);
-	subject.OnEnd({"a test", []() {}}, 42);
+	subject.OnEnd({"a test", []() {}}, std::chrono::high_resolution_clock::duration(42));
 	ASSERT_EQUAL(" (0.042 ms)\n", result.str());
 }

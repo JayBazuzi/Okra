@@ -19,7 +19,8 @@ namespace okra
 	namespace internals
 	{
 		template <typename TClock>
-		long long time_to_execute_microseconds(const std::function<void()> &operation);
+		std::chrono::high_resolution_clock::duration
+		duration_to_execute(const std::function<void()> &operation);
 		static std::vector<std::shared_ptr<IListener>> listeners;
 	}
 
@@ -27,7 +28,8 @@ namespace okra
 	{
 	public:
 		virtual void OnStart(const TestInfo &testInfo) = 0;
-		virtual void OnEnd(const TestInfo &testInfo, long long execution_time_us) = 0;
+		virtual void OnEnd(const TestInfo &testInfo,
+		                   std::chrono::high_resolution_clock::duration execution_time_us) = 0;
 		virtual void OnFail(const std::string &message) = 0;
 	};
 
@@ -46,8 +48,8 @@ namespace okra
 		}
 
 		bool pass;
-		long long execution_time_us;
-		execution_time_us = internals::time_to_execute_microseconds<std::chrono::high_resolution_clock>([&]() {
+		std::chrono::high_resolution_clock::duration execution_duration;
+		execution_duration = internals::duration_to_execute<std::chrono::high_resolution_clock>([&]() {
 			try
 			{
 				body();
@@ -60,7 +62,7 @@ namespace okra
 		});
 
 		for (const auto &listener : listeners) {
-			listener->OnEnd(*this, execution_time_us);
+			listener->OnEnd(*this, execution_duration);
 		}
 
 		return pass;
@@ -99,8 +101,7 @@ namespace okra
 		}
 
 		template <class T1, class T2>
-		void AssertEqual(
-		    const T1 &t1, const T2 &t2, const std::string &t1String, const std::string &t2String)
+		void AssertEqual(const T1 &t1, const T2 &t2, const std::string &t1String, const std::string &t2String)
 		{
 			std::stringstream stringstream;
 			stringstream << "EXPECTED: " << t1 << "(" << t1String << ")" << std::endl;
@@ -109,13 +110,13 @@ namespace okra
 		}
 
 		template <typename TClock>
-		long long time_to_execute_microseconds(const std::function<void()> &operation)
+		std::chrono::high_resolution_clock::duration duration_to_execute(const std::function<void()> &operation)
 		{
 			auto begin = TClock::now();
 			operation();
 			auto end = TClock::now();
 			auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - begin);
-			return duration.count();
+			return duration;
 		}
 
 		class OStreamListener : public IListener
@@ -128,9 +129,10 @@ namespace okra
 			{
 			}
 			void OnStart(const TestInfo &testInfo) override { ostream << testInfo.name; }
-			void OnEnd(const TestInfo &testInfo, long long execution_time_us) override
+			void OnEnd(const TestInfo &testInfo,
+			           std::chrono::high_resolution_clock::duration execution_duration) override
 			{
-				ostream << " (" << (execution_time_us / 1000.0) << " ms)" << std::endl;
+				ostream << " (" << (execution_duration.count() / 1000.0) << " ms)" << std::endl;
 			}
 			void OnFail(const std::string &message) override { ostream << message; }
 		};
@@ -151,7 +153,7 @@ namespace okra
 		public:
 			void Add(TestInfo testInfo) { tests.push_back(testInfo); }
 
-			bool RunAll(const std::vector<std::shared_ptr<IListener>>& listeners) const
+			bool RunAll(const std::vector<std::shared_ptr<IListener>> &listeners) const
 			{
 				if (tests.empty()) {
 					return false;
