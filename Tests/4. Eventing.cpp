@@ -25,11 +25,3 @@ TEST("when running a test")
 	ASSERT_EQUAL(1, string_listener->ends.size());
 	ASSERT_EQUAL(subject.name, string_listener->ends[0].name);
 }
-
-TEST("prints the name of the test on start")
-{
-	std::stringstream result;
-	okra::internals::OStreamListener subject(result);
-	subject.OnStart({"a test", []() {}});
-	ASSERT_EQUAL("a test", result.str());
-}
