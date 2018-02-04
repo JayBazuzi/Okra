@@ -45,8 +45,6 @@ public:
 	static void advance(duration d) noexcept { nowMicroseconds += d; }
 	static time_point now() noexcept { return nowMicroseconds; }
 
-	static const bool is_steady = false;
-
 private:
 	static time_point nowMicroseconds;
 };
