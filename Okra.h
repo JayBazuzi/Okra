@@ -131,7 +131,11 @@ namespace okra
 			void OnEnd(const TestInfo &testInfo,
 			           std::chrono::high_resolution_clock::duration execution_duration) override
 			{
-				ostream << " (" << (execution_duration.count() / 1000.0) << " ms)" << std::endl;
+				using namespace std::chrono;
+				ostream << " (";
+				ostream << duration_cast<milliseconds>(execution_duration).count() << "ms";
+				ostream << ")";
+				ostream << std::endl;
 			}
 			void OnFail(const std::string &message) override { ostream << message; }
 		};

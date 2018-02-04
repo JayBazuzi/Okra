@@ -38,6 +38,6 @@ TEST("prints the duration of the test on end")
 {
 	std::stringstream result;
 	okra::internals::OStreamListener subject(result);
-	subject.OnEnd({"a test", []() {}}, std::chrono::high_resolution_clock::duration(42));
-	ASSERT_EQUAL(" (0.042 ms)\n", result.str());
+	subject.OnEnd({"a test", []() {}}, std::chrono::milliseconds(42));
+	ASSERT_EQUAL(" (42ms)\n", result.str());
 }

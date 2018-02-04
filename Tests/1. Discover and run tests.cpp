@@ -1,4 +1,5 @@
 #include "Okra.h"
+#include "_TestHelpers/ArtificialClock.h"
 
 TEST("It runs all the tests.")
 {
@@ -36,31 +37,13 @@ TEST("If no tests run, the run fails.")
 	ASSERT(!subject.RunAll({}));
 }
 
-class ArtificialClock
-{
-public:
-	using duration = std::chrono::duration<uint64_t, std::ratio<1, 1000000>>;
-	using time_point = std::chrono::time_point<ArtificialClock>;
 
-	static void advance(duration duration) noexcept { nowMicroseconds += duration; }
-	static time_point now() noexcept { return nowMicroseconds; }
-
-private:
-	static time_point nowMicroseconds;
-};
 
 ArtificialClock::time_point ArtificialClock::nowMicroseconds;
 
-TEST("the body of a test that takes < 1 ms time is timed correctly")
+TEST("The duration of the test is reported")
 {
 	const ArtificialClock::duration result = okra::internals::duration_to_execute<ArtificialClock>(
-	    []() { ArtificialClock::advance(std::chrono::microseconds(2)); });
-	ASSERT_EQUAL(2000, result.count());
-}
-
-TEST("the body of a test that takes > 1 ms time is timed correctly")
-{
-	const ArtificialClock::duration result = okra::internals::duration_to_execute<ArtificialClock>(
-	    []() { ArtificialClock::advance(std::chrono::microseconds(42)); });
+	    []() { ArtificialClock::advance(ArtificialClock::duration(42)); });
 	ASSERT_EQUAL(42, std::chrono::duration_cast<std::chrono::microseconds>(result).count());
 }
