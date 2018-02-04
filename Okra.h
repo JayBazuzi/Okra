@@ -108,6 +108,22 @@ namespace okra
 			AssertMessage(t1 == t2, stringstream.str());
 		}
 
+		template <class TException>
+		void AssertThrows(const std::function<void()> action, const std::string &exceptionTypeString)
+		{
+			bool didThrow;
+			try
+			{
+				action();
+				didThrow = false;
+			}
+			catch (TException &)
+			{
+				didThrow = true;
+			}
+			AssertMessage(didThrow, "did not throw ");
+		}
+
 		template <typename TClock>
 		typename TClock::duration duration_to_execute(const std::function<void()> &operation)
 		{
@@ -198,6 +214,8 @@ namespace okra
 #define OKRA_ASSERT(condition) OKRA_ASSERT_MESSAGE((condition), #condition)
 #define OKRA_ASSERT_EQUAL(t1, t2) okra::internals::AssertEqual((t1), (t2), #t1, #t2)
 #define OKRA_FAIL(message) okra::internals::Fail((message))
+#define OKRA_ASSERT_THROWS(exception_type, action)                                                                     \
+	okra::internals::AssertThrows<exception_type>(action, #exception_type)
 
 #ifndef OKRA_DO_NOT_DEFINE_SHORT_NAMES
 #define ASSERT_MESSAGE OKRA_ASSERT_MESSAGE
@@ -205,6 +223,7 @@ namespace okra
 #define ASSERT OKRA_ASSERT
 #define FAIL OKRA_FAIL
 #define TEST OKRA_TEST
+#define ASSERT_THROWS OKRA_ASSERT_THROWS
 #define REGISTER_LISTENER OKRA_REGISTER_LISTENER
 #endif
 
