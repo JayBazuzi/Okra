@@ -1,5 +1,4 @@
 #include "Okra.h"
-#include "_TestHelpers/ArtificialClock.h"
 
 TEST("It runs all the tests.")
 {
@@ -35,15 +34,4 @@ TEST("If no tests run, the run fails.")
 {
 	okra::internals::Tests subject;
 	ASSERT(!subject.RunAll({}));
-}
-
-
-
-ArtificialClock::time_point ArtificialClock::nowMicroseconds;
-
-TEST("The duration of the test is reported")
-{
-	const ArtificialClock::duration result = okra::internals::duration_to_execute<ArtificialClock>(
-	    []() { ArtificialClock::advance(ArtificialClock::duration(42)); });
-	ASSERT_EQUAL(42, std::chrono::duration_cast<std::chrono::microseconds>(result).count());
 }
