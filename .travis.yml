@@ -7,7 +7,7 @@ language: cpp
 script:
   - mkdir build
   - cd build
-  - cmake -DCMAKE_CXX_COMPILER=$COMPILER ..
+  - cmake -DCMAKE_CXX_COMPILER=$COMPILER -Wdev -Werror=dev -Wdeprecated -Werror=deprecated ..
   - cmake --build .
   - ctest --verbose --parallel 4
 
