@@ -4,4 +4,4 @@ before_build:
 build:
   project: Project.sln
 test_script:
-- cmd: ctest --verbose
+- cmd: ctest --verbose --parallel 4

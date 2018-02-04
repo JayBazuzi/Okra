@@ -11,7 +11,7 @@ call :exec cmake --build .
 if ERRORLEVEL 1 goto :EOF
 
 set CTEST_OUTPUT_ON_FAILURE=1
-call :exec ctest
+call :exec ctest --parallel 4
 if ERRORLEVEL 1 goto :EOF
 
 goto :EOF

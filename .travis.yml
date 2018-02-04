@@ -9,7 +9,7 @@ script:
   - cd build
   - cmake -DCMAKE_CXX_COMPILER=$COMPILER ..
   - cmake --build .
-  - ctest --versbose
+  - ctest --verbose --parallel 4
 
 matrix:
  include:
