@@ -53,14 +53,14 @@ ArtificialClock::time_point ArtificialClock::nowMicroseconds;
 
 TEST("the body of a test that takes < 1 ms time is timed correctly")
 {
-	const auto result = okra::internals::duration_to_execute<ArtificialClock>(
+	const ArtificialClock::duration result = okra::internals::duration_to_execute<ArtificialClock>(
 	    []() { ArtificialClock::advance(std::chrono::microseconds(2)); });
 	ASSERT_EQUAL(2000, result.count());
 }
 
 TEST("the body of a test that takes > 1 ms time is timed correctly")
 {
-	const auto result = okra::internals::duration_to_execute<ArtificialClock>(
+	const ArtificialClock::duration result = okra::internals::duration_to_execute<ArtificialClock>(
 	    []() { ArtificialClock::advance(std::chrono::microseconds(42)); });
 	ASSERT_EQUAL(42, std::chrono::duration_cast<std::chrono::microseconds>(result).count());
 }

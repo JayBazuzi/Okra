@@ -19,8 +19,7 @@ namespace okra
 	namespace internals
 	{
 		template <typename TClock>
-		std::chrono::high_resolution_clock::duration
-		duration_to_execute(const std::function<void()> &operation);
+		typename TClock::duration duration_to_execute(const std::function<void()> &operation);
 		static std::vector<std::shared_ptr<IListener>> listeners;
 	}
 
@@ -110,7 +109,7 @@ namespace okra
 		}
 
 		template <typename TClock>
-		std::chrono::high_resolution_clock::duration duration_to_execute(const std::function<void()> &operation)
+		typename TClock::duration duration_to_execute(const std::function<void()> &operation)
 		{
 			auto begin = TClock::now();
 			operation();
