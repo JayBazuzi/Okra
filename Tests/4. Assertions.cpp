@@ -18,7 +18,7 @@ public:
 
 TEST("FAIL")
 {
-	const okra::TestInfo subject{"", []() { FAIL("blah"); }};
+	const okra::TestInfo subject{"file.cpp", "", []() { FAIL("blah"); }};
 
 	const auto string_listener = std::make_shared<StringListener>();
 	ASSERT(!subject.Run({string_listener}));
@@ -28,7 +28,7 @@ TEST("FAIL")
 
 TEST("ASSERT fail")
 {
-	const okra::TestInfo subject{"", []() { ASSERT(true); }};
+	const okra::TestInfo subject{"file.cpp", "", []() { ASSERT(true); }};
 
 	const auto string_listener = std::make_shared<StringListener>();
 	ASSERT(subject.Run({string_listener}));
@@ -37,7 +37,7 @@ TEST("ASSERT fail")
 
 TEST("ASSERT fail")
 {
-	const okra::TestInfo subject{"", []() { ASSERT(false); }};
+	const okra::TestInfo subject{"file.cpp", "", []() { ASSERT(false); }};
 	const auto string_listener = std::make_shared<StringListener>();
 	ASSERT(!subject.Run({string_listener}));
 	ASSERT_EQUAL(1, string_listener->fails.size());

@@ -55,6 +55,7 @@ namespace okra
 
 	struct TestInfo
 	{
+		const std::string file_path;
 		const std::string name;
 		const std::function<void()> body;
 
@@ -77,8 +78,14 @@ namespace okra
 			{
 				listeners.SendOnFail(exception.message);
 			}
+			catch (const std::exception &exception)
+			{
+				listeners.SendOnFail(exception.what());
+				pass = false;
+			}
 			catch (...)
 			{
+				listeners.SendOnFail("some exception fired");
 				pass = false;
 			}
 		});
@@ -241,7 +248,7 @@ namespace okra
 	void bodyName();                                                                                               \
 	struct initializerName                                                                                         \
 	{                                                                                                              \
-		initializerName() { okra::internals::allTests.Add({name, bodyName}); }                                 \
+		initializerName() { okra::internals::allTests.Add({__FILE__, name, bodyName}); }                       \
 	} initializerName##Instance;                                                                                   \
 	void bodyName()
 

@@ -2,7 +2,7 @@
 
 TEST("A test fails when it throws an exception.")
 {
-	okra::TestInfo subject{"a test", [&] { throw std::exception(); }};
+	okra::TestInfo subject{"file.cpp", "a test", [&] { throw std::exception(); }};
 	ASSERT(!subject.Run({}));
 }
 

@@ -17,7 +17,7 @@ TEST("Events are fired when running a test")
 {
 	auto string_listener = std::make_shared<StringListener>();
 
-	auto subject = okra::TestInfo({"A test", []() {}});
+	auto subject = okra::TestInfo({"file.cpp", "A test", []() {}});
 	subject.Run({string_listener});
 
 	ASSERT_EQUAL(1, string_listener->starts.size());
