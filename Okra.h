@@ -25,7 +25,7 @@ namespace okra
 		public:
 			Listeners() = default;
 			Listeners(std::initializer_list<std::shared_ptr<IListener>> l) { listeners = l; }
-			
+
 			void Register(std::shared_ptr<IListener> &&listener) { listeners.push_back(move(listener)); }
 			void SendOnStart(const TestInfo &testInfo) const;
 			void SendOnEnd(const TestInfo &testInfo,
@@ -219,6 +219,8 @@ namespace okra
 		}
 
 		Tests allTests;
+
+		bool RunAllTests() { return allTests.RunAll(okra::internals::allListeners); }
 	} // namespace internals
 } // namespace okra
 
@@ -262,4 +264,4 @@ namespace okra
 
 OKRA_REGISTER_LISTENER(okra::internals::ConsoleListener);
 
-int main(int argc, char **argv) { return okra::internals::allTests.RunAll(okra::internals::allListeners) ? 0 : 1; }
+int main(int argc, char **argv) { return okra::internals::RunAllTests() ? 0 : 1; }
