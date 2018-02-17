@@ -11,17 +11,17 @@ class ConsoleDiffReporter : public Reporter
 		cerr << received << " size " << FileUtils::fileSize(received) << endl;
 		cerr << approved << " size " << FileUtils::fileSize(approved) << endl;
 
-		{
-			std::ifstream file(received);
-			std::string str((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
-                        cerr << str << endl;
-		}
-		{
-			std::ifstream file(approved);
-			std::string str((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
-                        cerr << str << endl;
-		}
-                return true;
+		std::ifstream filer(received);
+		std::string str_recevied((std::istreambuf_iterator<char>(filer)), std::istreambuf_iterator<char>());
+		cerr << str_recevied << endl;
+
+		std::ifstream filea(approved);
+		std::string str_accepted((std::istreambuf_iterator<char>(filea)), std::istreambuf_iterator<char>());
+		cerr << str_accepted << endl;
+
+		cerr << "equality" << (str_recevied != str_accepted) << endl;
+
+		return true;
 	}
 };
 
