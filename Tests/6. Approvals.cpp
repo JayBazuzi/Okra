@@ -10,7 +10,18 @@ class ConsoleDiffReporter : public Reporter
 		cerr << approved << " exists " << FileUtils::fileExists(approved) << endl;
 		cerr << received << " size " << FileUtils::fileSize(received) << endl;
 		cerr << approved << " size " << FileUtils::fileSize(approved) << endl;
-		return DiffReporter().Report(received, approved);
+
+		{
+			std::ifstream file(received);
+			std::string str((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+                        cerr << str << endl;
+		}
+		{
+			std::ifstream file(approved);
+			std::string str((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+                        cerr << str << endl;
+		}
+                return true;
 	}
 };
 
