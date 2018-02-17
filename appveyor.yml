@@ -10,6 +10,5 @@ test_script:
 - cmd: ctest --verbose --parallel 4
 
 artifacts:
-  - path: Tests\*.received.*
-    name: approval tests received
+  - path: Tests
 
