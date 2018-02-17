@@ -1,7 +1,15 @@
 image: Visual Studio 2015
+
 before_build:
 - cmd: cmake .
+
 build:
   project: Project.sln
+
 test_script:
 - cmd: ctest --verbose --parallel 4
+
+artifacts:
+  - path: Tests\*.received.*
+    name: approval tests received
+
