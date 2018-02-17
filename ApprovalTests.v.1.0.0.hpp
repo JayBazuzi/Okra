@@ -315,7 +315,7 @@ public:
             int r = rstream.get();
 
             if (a != r) {
-                return new ApprovalMismatchException(receivedPath, approvedPath);
+                return new ApprovalMismatchException(receivedPath + std::to_string(a), approvedPath + std::to_string(r));
             }
         }
 
