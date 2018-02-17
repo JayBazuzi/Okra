@@ -25,4 +25,4 @@ class ConsoleDiffReporter : public Reporter
 	}
 };
 
-TEST("TestNameMayNotContainsSpaces") { Approvals::verify("foo", ConsoleDiffReporter()); }
+TEST("TestNameMayNotContainsSpaces") { Approvals::verify("blah blah blah blah", ConsoleDiffReporter()); }
