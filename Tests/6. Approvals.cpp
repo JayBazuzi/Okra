@@ -19,7 +19,7 @@ class ConsoleDiffReporter : public Reporter
 		std::string str_accepted((std::istreambuf_iterator<char>(filea)), std::istreambuf_iterator<char>());
 		cerr << str_accepted << endl;
 
-		cerr << "equality" << (str_recevied != str_accepted) << endl;
+		ASSERT_EQUAL(str_recevied, str_accepted);
 
 		return true;
 	}

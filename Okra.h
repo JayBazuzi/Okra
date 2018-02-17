@@ -123,8 +123,8 @@ namespace okra
 		void AssertEqual(const T1 &t1, const T2 &t2, const std::string &t1String, const std::string &t2String)
 		{
 			std::stringstream stringstream;
-			stringstream << "EXPECTED: " << t1 << "(" << t1String << ")" << std::endl;
-			stringstream << "ACTUAL  : " << t2 << "(" << t2String << ")" << std::endl;
+			stringstream << "EXPECTED: '" << t1 << "' (" << t1String << ")" << std::endl;
+			stringstream << "ACTUAL  : '" << t2 << "'(" << t2String << ")" << std::endl;
 			AssertMessage(t1 == t2, stringstream.str());
 		}
 
