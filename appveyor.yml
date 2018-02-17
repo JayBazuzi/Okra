@@ -9,6 +9,3 @@ build:
 test_script:
 - cmd: ctest --verbose --parallel 4
 
-artifacts:
-  - path: Tests
-
