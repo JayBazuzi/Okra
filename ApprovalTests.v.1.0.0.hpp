@@ -239,20 +239,51 @@ public:
 
 class ApprovalMismatchException : public ApprovalException
 {
-private:
-    std::string format( const std::string &received, const std::string &approved )
+    static 
+    std::string format( const std::string &received, const std::string &approved , const std::string message)
     {
         std::stringstream s;
         s << "Failed Approval: \n"
-          << "Received does not match approved \n"
+          << message << " \n"
           << "Received : \"" << received << "\" \n"
           << "Approved : \"" << approved << "\"";
         return s.str();
+
     }
 public:
-    ApprovalMismatchException( std::string received, std::string approved )
-        : ApprovalException( format( received, approved ) )
+    ApprovalMismatchException(const std::string &received, const std::string &approved, const std::string& message )
+    : ApprovalException(format(received, approved, message))
     {
+
+    }
+};
+
+class ApprovalContentMismatchException : public ApprovalMismatchException
+{
+public:
+    ApprovalContentMismatchException( std::string received, std::string approved, int position, int r, int a )
+        : ApprovalMismatchException( received, approved, "content" )
+    {
+    }
+};
+
+class ApprovalSizeMismatchException : public ApprovalMismatchException
+{
+    static std::string format( const std::string &received, const std::string &approved , int asize, int rsize)
+    {
+        std::stringstream s;
+        s << "different size \n"
+          << "Received size: " << rsize << " \n"
+          << "Approved size: " << asize << " \n"
+          ;
+        return s.str();
+
+    }
+public:
+    ApprovalSizeMismatchException(const std::string &received, const std::string &approved,  int asize, int rsize )
+        : ApprovalMismatchException(received, approved, format(received, approved, asize, rsize))
+    {
+
     }
 };
 
@@ -302,7 +333,7 @@ public:
         }
 
         if (asize != rsize) {
-            return new ApprovalMismatchException(receivedPath, approvedPath);
+            return new ApprovalSizeMismatchException(receivedPath, approvedPath, asize, rsize);
         }
 
         std::ifstream astream(approvedPath.c_str(),
@@ -310,12 +341,14 @@ public:
         std::ifstream rstream(receivedPath.c_str(),
                               std::ios::binary | std::ifstream::in);
 
+        int i = 0;
         while (astream.good() && rstream.good()) {
             int a = astream.get();
             int r = rstream.get();
+            i++;
 
             if (a != r) {
-                return new ApprovalMismatchException(receivedPath + std::to_string(a), approvedPath + std::to_string(r));
+                return new ApprovalContentMismatchException(receivedPath, approvedPath, i, a, r);
             }
         }
 
