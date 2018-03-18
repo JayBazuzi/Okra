@@ -1,61 +1,19 @@
 sudo: required
 dist: trusty
 group: edge
-
 language: cpp
-
-script:
-  - mkdir build
-  - cd build
-  - cmake -DCMAKE_CXX_COMPILER=$COMPILER -Wdev -Werror=dev -Wdeprecated -Werror=deprecated ..
-  - cmake --build .
-  - ctest --verbose --parallel 4
 
 matrix:
  include:
 
-  - os: linux
-    compiler: g++
-    env: COMPILER=g++-6 BUILD=Debug ARCH=64
-    addons:
-     apt:
-      sources:
-       - ubuntu-toolchain-r-test
-      packages:
-       - g++-6
-
-  - os: linux
-    compiler: g++
-    env: COMPILER=g++-6 BUILD=Release ARCH=64
-    addons:
-     apt:
-      sources:
-       - ubuntu-toolchain-r-test
-      packages:
-       - g++-6
-
-  - os: linux
-    compiler: g++
-    env: COMPILER=g++-5 BUILD=Debug ARCH=64
-    addons:
-     apt:
-      sources:
-       - ubuntu-toolchain-r-test
-      packages:
-       - g++-5
-
-  - os: linux
-    compiler: g++
-    env: COMPILER=g++-5 BUILD=Release ARCH=64
-    addons:
-     apt:
-      sources:
-       - ubuntu-toolchain-r-test
-      packages:
-       - g++-5
-
   - os: osx
     osx_image: xcode8
+    script:
+      - mkdir build
+      - cd build
+      - cmake -DCMAKE_CXX_COMPILER=$COMPILER -Wdev -Werror=dev -Wdeprecated -Werror=deprecated ..
+      - cmake --build .
+      - ctest --verbose --parallel 4
 
   - os: linux
     env: NAME="clang-format"

@@ -1,7 +1,9 @@
-image: Visual Studio 2015
+image:
+  - Visual Studio 2015
+  - ubuntu
+
 before_build:
-- cmd: cmake .
-build:
-  project: Project.sln
+- cmake .
+build_script: cmake --build .
 test_script:
-- cmd: ctest --verbose --parallel 4
+- ctest --verbose --parallel 4
