@@ -15,8 +15,8 @@ namespace okra
 
 	namespace internals
 	{
-		template <typename TClock>
-		typename TClock::duration duration_to_execute(const std::function<void()> &operation);
+		std::chrono::high_resolution_clock::duration
+		duration_to_execute(const std::function<void()> &operation);
 
 		class Listeners
 		{
@@ -67,7 +67,7 @@ namespace okra
 
 		bool pass = false;
 		std::chrono::high_resolution_clock::duration execution_duration;
-		execution_duration = internals::duration_to_execute<std::chrono::high_resolution_clock>([&]() {
+		execution_duration = internals::duration_to_execute([&]() {
 			try
 			{
 				body();
@@ -135,12 +135,11 @@ namespace okra
 			AssertMessage(didThrow, "did not throw ");
 		}
 
-		template <typename TClock>
-		typename TClock::duration duration_to_execute(const std::function<void()> &operation)
+		std::chrono::high_resolution_clock::duration duration_to_execute(const std::function<void()> &operation)
 		{
-			auto begin = TClock::now();
+			auto begin = std::chrono::high_resolution_clock::now();
 			operation();
-			auto end = TClock::now();
+			auto end = std::chrono::high_resolution_clock::now();
 			auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - begin);
 			return duration;
 		}
