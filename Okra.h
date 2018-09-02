@@ -214,30 +214,30 @@ namespace okra
 
 #define OKRA_REGISTER_LISTENER(name) OKRA_REGISTER_LISTENER_(name, __COUNTER__)
 #define OKRA_REGISTER_LISTENER_(name, counter) OKRA_REGISTER_LISTENER__(name, counter)
-#define OKRA_REGISTER_LISTENER__(name, counter)                                                                        \
+#define OKRA_REGISTER_LISTENER__(name, counter) \
 	OKRA_REGISTER_LISTENER___(name, LISTENER_##counter, ListenerInitializer##counter)
-#define OKRA_REGISTER_LISTENER___(name, bodyName, initializerName)                                                     \
-	struct initializerName                                                                                         \
-	{                                                                                                              \
-		initializerName() { okra::RegisterListener<name>(); }                                                  \
+#define OKRA_REGISTER_LISTENER___(name, bodyName, initializerName) \
+	struct initializerName \
+	{ \
+		initializerName() { okra::RegisterListener<name>(); } \
 	} initializerName##Instance
 
 #define OKRA_TEST(name) OKRA_TEST_(name, __COUNTER__)
 #define OKRA_TEST_(name, counter) OKRA_TEST__(name, counter)
 #define OKRA_TEST__(name, counter) OKRA_TEST___(name, TEST_##counter, TestInitializer##counter)
-#define OKRA_TEST___(name, bodyName, initializerName)                                                                  \
-	void bodyName();                                                                                               \
-	struct initializerName                                                                                         \
-	{                                                                                                              \
-		initializerName() { okra::internals::allTests.Add({name, bodyName}); }                                 \
-	} initializerName##Instance;                                                                                   \
+#define OKRA_TEST___(name, bodyName, initializerName) \
+	void bodyName(); \
+	struct initializerName \
+	{ \
+		initializerName() { okra::internals::allTests.Add({name, bodyName}); } \
+	} initializerName##Instance; \
 	void bodyName()
 
 #define OKRA_ASSERT_MESSAGE(condition, message) okra::internals::AssertMessage((condition), message)
 #define OKRA_ASSERT(condition) OKRA_ASSERT_MESSAGE((condition), #condition)
 #define OKRA_ASSERT_EQUAL(t1, t2) okra::internals::AssertEqual((t1), (t2), #t1, #t2)
 #define OKRA_FAIL(message) okra::internals::Fail((message))
-#define OKRA_ASSERT_THROWS(exception_type, action)                                                                     \
+#define OKRA_ASSERT_THROWS(exception_type, action) \
 	okra::internals::AssertThrows<exception_type>(action, #exception_type)
 
 #ifndef OKRA_DO_NOT_DEFINE_SHORT_NAMES
