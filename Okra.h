@@ -43,7 +43,7 @@ namespace okra
 			{
 			}
 		};
-	}
+	} // namespace internals
 
 	class IListener
 	{
@@ -107,9 +107,7 @@ namespace okra
 
 		void AssertMessage(bool condition, const std::string &message)
 		{
-			if (!condition) {
-				Fail(message);
-			}
+			if (!condition) { Fail(message); }
 		}
 
 		template <class T1, class T2>
@@ -187,35 +185,25 @@ namespace okra
 
 			bool RunAll(const Listeners &listeners) const
 			{
-				if (tests.empty()) {
-					return false;
-				}
+				if (tests.empty()) { return false; }
 				bool pass = true;
-				for (const auto &testInfo : tests) {
-					pass &= testInfo.Run(listeners);
-				}
+				for (const auto &testInfo : tests) { pass &= testInfo.Run(listeners); }
 				return pass;
 			}
 		};
 
 		void Listeners::SendOnStart(const TestInfo &testInfo) const
 		{
-			for (const auto &listener : listeners) {
-				listener->OnStart(testInfo);
-			}
+			for (const auto &listener : listeners) { listener->OnStart(testInfo); }
 		}
 		void Listeners::SendOnEnd(const TestInfo &testInfo,
 		                          std::chrono::high_resolution_clock::duration duration) const
 		{
-			for (const auto &listener : listeners) {
-				listener->OnEnd(testInfo, duration);
-			}
+			for (const auto &listener : listeners) { listener->OnEnd(testInfo, duration); }
 		}
 		void Listeners::SendOnFail(const std::string &message) const
 		{
-			for (const auto &listener : listeners) {
-				listener->OnFail(message);
-			}
+			for (const auto &listener : listeners) { listener->OnFail(message); }
 		}
 
 		Tests allTests;
