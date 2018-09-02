@@ -1,8 +1,8 @@
 # Okra
 
-[![Windows Build status (Appveyor)](https://ci.appveyor.com/api/projects/status/u80a5vwc2ru4mu0k/branch/master?svg=true)](https://ci.appveyor.com/project/JayBazuzi/okra/branch/master)
+[![Windows / Linux Build status (Appveyor)](https://ci.appveyor.com/api/projects/status/u80a5vwc2ru4mu0k/branch/master?svg=true)](https://ci.appveyor.com/project/JayBazuzi/okra/branch/master) - Windows and Linux 
 
-[![Linux Build Status (Travis-CI)](https://travis-ci.org/JayBazuzi/Okra.svg?branch=master)](https://travis-ci.org/JayBazuzi/Okra)
+[![OSX Build Status (Travis-CI)](https://travis-ci.org/JayBazuzi/Okra.svg?branch=master)](https://travis-ci.org/JayBazuzi/Okra) - OSX
 
 ## What is it?
 
