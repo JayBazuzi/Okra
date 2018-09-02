@@ -29,7 +29,7 @@ namespace okra
 			void Register(std::shared_ptr<IListener> &&listener) { listeners.push_back(move(listener)); }
 			void SendOnStart(const TestInfo &testInfo) const;
 			void SendOnEnd(const TestInfo &testInfo,
-			               std::chrono::high_resolution_clock::duration duration) const;
+				       std::chrono::high_resolution_clock::duration duration) const;
 			void SendOnFail(const std::string &message) const;
 
 		} allListeners;
@@ -100,8 +100,8 @@ namespace okra
 		{
 			std::stringstream stringstream;
 			stringstream << ": "
-			             << " - assert FAILED - " << std::endl
-			             << message << std::endl;
+				     << " - assert FAILED - " << std::endl
+				     << message << std::endl;
 			throw AssertionFailedException(stringstream.str());
 		}
 
@@ -155,7 +155,7 @@ namespace okra
 			}
 			void OnStart(const TestInfo &testInfo) override { ostream << testInfo.name; }
 			void OnEnd(const TestInfo &testInfo,
-			           std::chrono::high_resolution_clock::duration execution_duration) override
+				   std::chrono::high_resolution_clock::duration execution_duration) override
 			{
 				using namespace std::chrono;
 				ostream << " (";
@@ -196,7 +196,7 @@ namespace okra
 			for (const auto &listener : listeners) { listener->OnStart(testInfo); }
 		}
 		void Listeners::SendOnEnd(const TestInfo &testInfo,
-		                          std::chrono::high_resolution_clock::duration duration) const
+					  std::chrono::high_resolution_clock::duration duration) const
 		{
 			for (const auto &listener : listeners) { listener->OnEnd(testInfo, duration); }
 		}
