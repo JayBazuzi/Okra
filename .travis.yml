@@ -25,6 +25,6 @@ matrix:
       - mkdir .build
       - cd .build
       - cmake -DCMAKE_CXX_COMPILER=$COMPILER -DCMAKE_EXPORT_COMPILE_COMMANDS=ON ..
-      - ../.travis/clang-format.sh
-      - ../.travis/clang-tidy.sh
+      - sh ../.travis/clang-format.sh
+      - sh ../.travis/clang-tidy.sh
 
