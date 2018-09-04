@@ -22,5 +22,9 @@ matrix:
         packages:
           - clang-format-3.9
     script: 
-      - .travis/clang-format.sh
+      - mkdir build
+      - cd build
+      - cmake -DCMAKE_CXX_COMPILER=$COMPILER -DCMAKE_EXPORT_COMPILE_COMMANDS=ON ..
+      - ../.travis/clang-format.sh
+      - ../.travis/clang-tidy.sh
 
