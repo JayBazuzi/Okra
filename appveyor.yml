@@ -1,6 +1,6 @@
 image:
   - Visual Studio 2015
-  - ubuntu
+  - ubuntu1804
 
 before_build:
 - cmake .
