@@ -1,6 +1,12 @@
 @SETLOCAL
 @ECHO OFF
 
+WHERE cmake > nul: 2>&1
+IF ERRORLEVEL 1 (
+    echo ERROR! CMake not found. Install from https://cmake.org/download/
+    exit /b 1
+)
+
 IF NOT EXIST .build mkdir .build
 cd .build
 
