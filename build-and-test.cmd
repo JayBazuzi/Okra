@@ -10,7 +10,7 @@ IF ERRORLEVEL 1 (
 IF NOT EXIST .build mkdir .build
 cd .build
 
-CALL :exec cmake .. -Wdev -Werror=dev -Wdeprecated -Werror=deprecated -G "Visual Studio 15 2017"
+CALL :exec cmake .. -Wdev -Werror=dev -Wdeprecated -Werror=deprecated -G "Visual Studio 16 2019"
 IF ERRORLEVEL 1 GOTO :EOF
 
 CALL :exec cmake --build . -- /verbosity:minimal /nologo
